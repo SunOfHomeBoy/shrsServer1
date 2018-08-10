@@ -4,10 +4,7 @@ var bodyParser = require("body-parser");
 var compression = require("compression");
 var cookieParser = require("cookie-parser");
 var express = require("express");
-var fileStreamRotator = require("file-stream-rotator");
-var fs = require("fs");
 var http = require("http");
-var morgan = require("morgan");
 var multiparty = require("connect-multiparty");
 var path = require("path");
 var pm = require("pm");
@@ -61,25 +58,6 @@ var serve = (function () {
         app.use(bodyParser.json({ limit: '50mb' }));
         app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
         app.use(cookieParser());
-        var logdir = path.join(setting_1["default"].pathTmpdir, configures.name || 'default');
-        fs.existsSync(setting_1["default"].pathTmpdir) || fs.mkdirSync(setting_1["default"].pathTmpdir);
-        fs.existsSync(logdir) || fs.mkdirSync(logdir);
-        if (process.env.NODE_ENV !== 'production') {
-            console.log("use combined");
-            app.use(morgan('combined'));
-        }
-        else {
-            console.log("use log");
-            var options = {
-                stream: fileStreamRotator.getStream({
-                    date_format: 'YYYYMMDD',
-                    filename: path.join(logdir, configures.name + '-%DATE%.log'),
-                    frequency: 'daily',
-                    verbose: false
-                })
-            };
-            app.use(morgan('combined', options));
-        }
         if (process.env.NODE_ENV !== 'production') {
             app.use('/development', function (req, res, next) {
                 res.header('Content-Type', 'text/html;charset=utf-8');
