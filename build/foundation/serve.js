@@ -1,20 +1,10 @@
 "use strict";
 exports.__esModule = true;
-var bodyParser = require("body-parser");
-var compression = require("compression");
-var cookieParser = require("cookie-parser");
 var express = require("express");
 var http = require("http");
-var multiparty = require("connect-multiparty");
 var path = require("path");
 var pm = require("pm");
-var log_1 = require("./log");
-var request_1 = require("./request");
-var response_1 = require("./response");
-var utils_1 = require("./utils");
-var dev_1 = require("./dev");
 var setting_1 = require("../config/setting");
-var upload_1 = require("../api/imgUpload/upload");
 var serve = (function () {
     function serve(configures) {
         this.configures = configures;
@@ -52,78 +42,6 @@ var serve = (function () {
         var configures = this.configures;
         app.set('env', process.env.NODE_ENV || 'development');
         app.set('port', configures.port || setting_1["default"].port);
-        app.use(compression());
-        app.use('/public', express.static(setting_1["default"].pathPublic));
-        app.use('/assets', express.static(setting_1["default"].pathAssets));
-        app.use(bodyParser.json({ limit: '50mb' }));
-        app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-        app.use(cookieParser());
-        if (process.env.NODE_ENV !== 'production') {
-            app.use('/development', function (req, res, next) {
-                res.header('Content-Type', 'text/html;charset=utf-8');
-                res.end(dev_1["default"].render({ pathinfo: req.path }));
-            });
-        }
-        app.use('/service/upload/imgUpload', multiparty(), function (req, res, next) {
-            upload_1["default"](req, res, next).then(function (callback) {
-                console.log(callback);
-                res.header('charset', 'utf8');
-                res.header('Content-Type', 'application/json');
-                res.status(callback.code < 1000 ? callback.code : 200).end(JSON.stringify(callback));
-            });
-        });
-        app.use(function (req, res, next) {
-            var requestData = new request_1["default"](req);
-            var responseData = new response_1["default"](res);
-            var accessToken = requestData.REQUEST('accessToken') || requestData.COOKIE('accessToken') || '';
-            var timezone = parseFloat(requestData.REQUEST('timezone', '8.0'));
-            var appID = requestData.REQUEST('appid');
-            var parameters = utils_1["default"].jsonDecode(requestData.REQUEST('parameters'));
-            var controller = configures.mappings[req.path];
-            if (!controller || !controller.component) {
-                return responseData.apiNotFound();
-            }
-            if (/^\/api\//i.test(req.path) === false) {
-                return controller.component(requestData, responseData, parameters).then(function (callback) {
-                    switch (callback.code) {
-                        case 403:
-                            return responseData.errorPermission();
-                        case 404:
-                            return responseData.errorNotFound();
-                        default:
-                            return responseData.renderHTML(callback.data, callback.code);
-                    }
-                }, function (err) {
-                    if (process.env.NODE_ENV !== 'production') {
-                        console.log(err);
-                    }
-                    responseData.errorInternalServer();
-                });
-            }
-            if (controller.method !== 'GET' && utils_1["default"].empty(requestData.POST())) {
-                return responseData.apiPermission();
-            }
-            var url = requestData.getHeader("Origin");
-            responseData.setHeader('Access-Control-Allow-Origin', url);
-            responseData.setHeader('Access-Control-Allow-Methods', 'POST');
-            responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type');
-            responseData.setHeader("Access-Control-ALLOW-Credentials", "true");
-            if (controller.auth > 1) {
-                console.log(111111);
-                res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
-                responseData.renderJSON({ code: 403, msg: 'do not have permission' });
-            }
-            log_1["default"].api(requestData);
-            controller.component(requestData, responseData, parameters).then(function (callback) {
-                responseData.renderJSON(callback);
-            }, function (err) {
-                if (process.env.NODE_ENV !== 'production') {
-                    console.log(err);
-                }
-                console.log(err);
-                responseData.apiInternalServer();
-            });
-        });
         return app;
     };
     return serve;
