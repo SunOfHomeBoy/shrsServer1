@@ -130,7 +130,7 @@ var serve = (function () {
             responseData.setHeader('Access-Control-Allow-Methods', 'POST');
             responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type');
             responseData.setHeader("Access-Control-ALLOW-Credentials", "true");
-            if (!requestData.SESSION().user && controller.auth > 1) {
+            if (controller.auth > 1) {
                 console.log(111111);
                 res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
                 responseData.renderJSON({ code: 403, msg: 'do not have permission' });
