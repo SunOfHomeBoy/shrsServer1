@@ -21,4 +21,5 @@ export default {
         pathTmpdir: process.env.NODE_ENV !== 'production'
                 ? path.join(__dirname, '../../tmp')
                 : '/mnt/www/tmp'
+                // : '/mnt/d/tmp'
 }
