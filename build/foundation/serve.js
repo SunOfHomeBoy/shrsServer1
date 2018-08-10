@@ -4,7 +4,6 @@ var bodyParser = require("body-parser");
 var compression = require("compression");
 var cookieParser = require("cookie-parser");
 var express = require("express");
-var session = require("express-session");
 var fileStreamRotator = require("file-stream-rotator");
 var fs = require("fs");
 var http = require("http");
@@ -62,15 +61,6 @@ var serve = (function () {
         app.use(bodyParser.json({ limit: '50mb' }));
         app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
         app.use(cookieParser());
-        app.use(session({
-            secret: 'shrs',
-            name: 'shrsID',
-            cookie: {
-                httpOnly: true
-            },
-            resave: false,
-            saveUninitialized: true
-        }));
         var logdir = path.join(setting_1["default"].pathTmpdir, configures.name || 'default');
         fs.existsSync(setting_1["default"].pathTmpdir) || fs.mkdirSync(setting_1["default"].pathTmpdir);
         fs.existsSync(logdir) || fs.mkdirSync(logdir);
