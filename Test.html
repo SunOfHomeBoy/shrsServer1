@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.js"></script>
+</head>
+
+<body>
+
+  <div>
+
+    <div>
+      <button onclick="addArticle()">增加/修改 文章</button>
+      <button onclick="batchArticle1()">批量增加文章</button>
+    </div>
+    <div>
+      <button onclick="delArticle()">删除 文章</button>
+    </div>
+    <div>
+      <button onclick="searchArticle()">获取文章列表</button>
+    </div>
+    <div>
+      <button onclick="detArticle()">获取文章详情</button>
+    </div>
+    <div>
+      <button onclick="searchImgList()">获取图片列表</button>
+      ||
+      <button onclick="searchImg()">获取图片</button>
+    </div>
+    <div>
+      <!-- <button onclick="searchImgList()">获取图片列表</button> -->
+      ||
+      <button onclick="addImg()">增加图片</button>
+    </div>
+
+    <button onclick="xhrClick()">xhr显示</button>
+    <!-- 进度条 -->
+    <progress id="progressBar" value="51" max="100">
+      <div class="bugs">123123132</div>
+    </progress>
+
+    <!-- 跳转上传 -->
+    <form enctype='multipart/form-data' action="http://localhost:10007/api/upload/imgUpload" method="post">
+      <input type="file" name="imgUpload" id="img">
+      <input type="submit">
+    </form>
+
+
+    <div>
+      <button onclick="singnup()">注册账号</button>
+    </div>
+
+    <script>
+      var val = document.getElementsByClassName('val')[0];
+      var result = document.getElementsByClassName('result')[0];
+      
+      function singnup() {
+        ajax({
+          url: "http://192.168.0.191:10007/api/signup",
+          type: "POST",
+          data: {
+            parameters: JSON.stringify({
+              "username": "四海日盛", // 企业用户管理员账号 String 可空 仅对registerType=enterprise有效
+              "password": "shrs88888", // 注册密码 String 非空
+              "confirm": "shrs88888", // 确认密码 String 非空
+            })
+          },
+          dataType: "json",
+          success: function (response, xml) {
+            console.log(response, xml);
+            // 此处放成功后执行的代码
+            // var allData = JSON.parse(response)
+
+            // console.log("allData::", allData, "\n", response);
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        })
+      }
+      function xhrClick() {
+        ajax({
+          url: "http://192.168.0.191:10007/api/signin",
+          type: "POST",
+          data: {
+            parameters: JSON.stringify({
+              imgMode: 1,
+              imgItem: "荣誉证书", // 图片模型下子类型 可空 默认值：空字符串
+              title: "医院消毒清洁资质证书", // 图片主标题 非空 默认值：空字符串
+              linkURL: 'http://i1.fuimg.com/611341/635673d18b0ad969s.jpg',
+            })
+          },
+          dataType: "json",
+          success: function (response, xml) {
+            console.log(response, xml);
+            // 此处放成功后执行的代码
+            // var allData = JSON.parse(response)
+
+            // console.log("allData::", allData, "\n", response);
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        })
+      }
+
+      function searchImg() {
+        console.log("search");
+        ajax({
+          url: "http://localhost:10007/api/searchImg", //请求地址
+          type: "POST", //请求方式
+          data: {
+            parameters: JSON.stringify({
+              "imgMode": 2,
+              imgItem: "外墙清洗"
+            })
+          }, //请求参数
+          dataType: "json",
+          success: function (response, xml) {
+            console.log("clb");
+            // 此处放成功后执行的代码
+            var allData = JSON.parse(response)
+            // result.innerHTML = allData.data.allMobile
+            console.log(allData);
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        })
+      }
+     
+      function delArticle() {
+        ajax({
+          url: "http://localhost:10007/api/article/delArticle", //请求地址
+          type: "POST", //请求方式
+          data: {
+            parameters: JSON.stringify({
+              "articleID":"20180712556579",
+            })
+          }, //请求参数
+          dataType: "json",
+          success: function (response, xml) {
+            // 此处放成功后执行的代码
+            var allData = JSON.parse(response)
+            // result.innerHTML = allData.data.allMobile
+            console.log(allData);
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        })
+      }
+
+      function detArticle() {
+        ajax({
+          url: "http://localhost:10007/api/article/detArticle", //请求地址
+          type: "POST", //请求方式
+          data: {
+            parameters: JSON.stringify({
+              "articleID":"20180712556579",
+            })
+          }, //请求参数
+          dataType: "json",
+          success: function (response, xml) {
+            // 此处放成功后执行的代码
+            var allData = JSON.parse(response)
+            // result.innerHTML = allData.data.allMobile
+            console.log(allData);
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        })
+      }
+
+      function searchArticle() {
+        ajax({
+          url: "http://localhost:10007/api/article/searchArticle", //请求地址
+          type: "POST", //请求方式
+          data: {
+            parameters: JSON.stringify({
+              "articleType": "服务项目123",
+            })
+          }, //请求参数
+          dataType: "json",
+          success: function (response, xml) {
+            // 此处放成功后执行的代码
+            var allData = JSON.parse(response)
+            // result.innerHTML = allData.data.allMobile
+            console.log(allData);
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        })
+      }
+
+      let articles = []
+
+      function batchArticle1() {
+
+        for (let i = 0; i < articles.length; i++) {
+          updateArticle(articles[i])
+        }
+
+        function updateArticle(data) {
+          ajax({
+            url: "http://localhost:10007/api/article/addArticle", //请求地址
+            type: "POST", //请求方式
+            data: {
+              accessToken: '',
+              appID: '',
+              parameters: JSON.stringify({
+                // "openID": "3MjFiODU4Mjg0Zjc2NTQ3MjVhZDZhYzk0NjcxMWVlZjFi9",
+                "title": data.title,
+                "subtitle": "",
+                "articleType": "服务项目",
+                "authors": "四海日盛",
+                "linkURL": "",
+                "thumb": data.thumb,
+                "description": data.description,
+                "content": data.content,
+              })
+            }, //请求参数
+            dataType: "json",
+            success: function (response, xml) {
+              // 此处放成功后执行的代码
+              var allData = JSON.parse(response)
+              // result.innerHTML = allData.data.allMobile
+              console.log(allData);
+            },
+            fail: function (status) {
+              // 此处放失败后执行的代码
+              console.log('错误', status);
+            }
+          });
+        }
+
+      }
+
+      function addArticle() {
+        ajax({
+          url: "http://localhost:10007/api/article/addArticle", //请求地址
+          type: "POST", //请求方式
+          data: {
+            parameters: JSON.stringify({
+              "title": "data.title",
+              "subtitle": "",
+              "articleType": "服务项目123",
+              "authors": "四海日盛3213123213",
+              "linkURL": "",
+              "thumb": "data.thumb",
+              "description": "data.description",
+              "content": "data.content",
+            })
+          }, //请求参数
+          dataType: "json",
+          success: function (response, xml) {
+            // 此处放成功后执行的代码
+            var allData = JSON.parse(response)
+            // result.innerHTML = allData.data.allMobile
+            console.log(allData);
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        })
+      }
+
+      function ajax(options) {
+        options = options || {};
+        options.type = (options.type || "GET").toUpperCase();
+        options.dataType = options.dataType || "json";
+        var params = formatParams(options.data);
+
+        //创建 - 非IE6 - 第一步
+        if (window.XMLHttpRequest) {
+          var xhr = new XMLHttpRequest();
+        } else { //IE6及其以下版本浏览器
+          var xhr = new ActiveXObject('Microsoft.XMLHTTP');
+        }
+
+        //接收 - 第三步
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            var status = xhr.status;
+            if (status >= 200 && status < 300) {
+              console.log("xhr callback", xhr);
+              options.success && options.success(xhr.responseText, xhr.responseXML);
+            } else {
+              options.fail && options.fail(status);
+            }
+          }
+        }
+
+        //连接 和 发送 - 第二步
+        if (options.type == "GET") {
+          xhr.open("GET", options.url + "?" + params, true);
+          xhr.send(null);
+        } else if (options.type == "POST") {
+          xhr.open("POST", options.url, true);
+          //设置表单提交时的内容类型
+          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xhr.send(params);
+        }
+      }
+      // 格式化参数
+      function formatParams(data) {
+        var arr = [];
+        for (var name in data) {
+          arr.push(encodeURIComponent(name) + "=" + encodeURIComponent(data[name]));
+        }
+        arr.push(("v=" + Math.random()).replace(".", ""));
+        console.log(arr);
+        return arr.join("&");
+      }
+    </script>
+
+  </div>
+
+
+</body>
+
+
+</html>

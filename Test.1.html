@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.js"></script>
+</head>
+
+<body>
+  <div class="button">
+    <p class="val">
+      7417417474741 18500287818 /r \r 13681507928 \r\n 13233806850 /r/n 17601605868 \n 13681507928 /n 13681507928 13403350162 13233806850
+      18565898295 15030098661 150
+    </p>
+    <button onclick="upData()">qwer</button>
+
+    <p class="result">
+      lorem ipsum
+    </p>
+
+    <div>-------------------分割线-----------------------</div>
+    <button onclick="lotto()">抽奖</button>
+
+    <div>-------------------分割线-----------------------</div>
+    <button onclick="lottoRule()">定义抽奖规则</button>
+
+    <div>-------------------分割线-----------------------</div>
+    <button onclick="lottoQuery()">查询抽奖规则</button>
+
+    <div>-------------------分割线-----------------------</div>
+    <button onclick="like()">like点赞</button>
+
+  </div>
+
+  <br>
+  <br>
+  <br>
+  <br> -------------------分割线-----------------------
+  <div>
+
+    <div>
+      <button onclick="upArticle()">增加/修改 文章</button>
+      <button onclick="batchArticle1()">批量增加文章</button>
+    </div>
+    <div>
+      <button onclick="delArticle()">删除 文章</button>
+    </div>
+    <div>
+      <button onclick="searchArticle()">获取文章列表</button>
+    </div>
+    <div>
+      <button onclick="detArticle()">获取文章详情</button>
+    </div>
+    <div>
+      <button onclick="searchImgList()">获取图片列表</button>
+      ||
+      <button onclick="searchImg()">获取图片</button>
+    </div>
+    <div>
+      <!-- <button onclick="searchImgList()">获取图片列表</button> -->
+      ||
+      <button onclick="addImg()">增加图片</button>
+    </div>
+    <!-- 进度条 -->
+    <progress id="progressBar" value="51" max="100">
+      <div class="bugs">123123132</div>
+    </progress>
+
+    <!-- 跳转上传 -->
+    <form enctype='multipart/form-data' action="http://localhost:10007/api/upload/imgUpload" method="post">
+      <input type="file" name="imgUpload" id="img">
+      <input type="submit">
+    </form>
+    
+    <button onclick="xhrClick()">xhr显示</button>
+
+    <script>
+      var val = document.getElementsByClassName('val')[0];
+      var result = document.getElementsByClassName('result')[0];
+
+      function xhrClick() {
+        ajax({
+          url: "http://localhost:10007/api/signin",
+          type: "POST",
+          data: {
+            parameters: JSON.stringify({
+              imgMode: 1,
+              imgItem: "荣誉证书", // 图片模型下子类型 可空 默认值：空字符串
+              title: "医院消毒清洁资质证书", // 图片主标题 非空 默认值：空字符串
+              linkURL: 'http://i1.fuimg.com/611341/635673d18b0ad969s.jpg',
+            })
+          },
+          dataType: "json",
+          success: function (response, xml) {
+            console.log(response, xml);
+            // 此处放成功后执行的代码
+            // var allData = JSON.parse(response)
+
+            // console.log("allData::", allData, "\n", response);
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        })
+      }
+      function addImg() {
+        ajax({
+          url: "http://localhost:10007/api/imgs/addImg",
+          type: "POST",
+          data: {
+            parameters: JSON.stringify({
+              imgMode: 1,
+              imgItem: "荣誉证书", // 图片模型下子类型 可空 默认值：空字符串
+              title: "医院消毒清洁资质证书", // 图片主标题 非空 默认值：空字符串
+              linkURL: 'http://i1.fuimg.com/611341/635673d18b0ad969s.jpg',
+            })
+          },
+          dataType: "json",
+          success: function (response, xml) {
+            // 此处放成功后执行的代码
+            var allData = JSON.parse(response)
+
+            console.log("allData::", allData, "\n", response);
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        })
+      }
+
+      function searchImgList() {
+        ajax({
+          url: "http://localhost:10007/api/",
+          type: "POST",
+          data: {
+            parameters: JSON.stringify({
+              "imgMode": 1
+            })
+          },
+          dataType: "json",
+          success: function (response, xml) {
+            // 此处放成功后执行的代码
+            var allData = JSON.parse(response)
+            // result.innerHTML = allData.data.allMobile
+
+            console.log(allData);
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        })
+      }
+
+
+
+      function searchArticle() {
+       
+      }
+
+      function delArticle() {
+        ajax({
+          url: "http://localhost:10007/api/article/delArticle",
+          type: "POST",
+          data: {
+            parameters: JSON.stringify({
+              "articleID": "20180709072313",
+              "enable": false
+            })
+          },
+          dataType: "json",
+          success: function (response, xml) {
+            // 此处放成功后执行的代码
+            var allData = JSON.parse(response)
+            // result.innerHTML = allData.data.allMobile
+
+            console.log(allData);
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        })
+      }
+
+
+      function batchArticle1() {
+        let articles = [
+          {
+              "title": "NO.1成品保护",
+              "subtitle": "",
+              "articleType": "serverItem",
+              "authors": "四海日盛",
+              "thumb": "http://i2.tiimg.com/611341/b66c935ed2587806t.jpg",
+              "description": "成品保护管理是施工管理的重要组成部分,是保证工期避免工料费用和施工安全,保证生产顺利进行的主要环节。因此，切实加强成品保护管理。特别是加强装修阶段的成品保护管理，落实岗位责任制，杜绝或减少人为的丢失损坏现象是成品保护管理工…",
+              "content": "成品保护管理是施工管理的重要组成部分,是保证工期避免工料费用和施工安全,保证生产顺利进行的主要环节。因此，切实加强成品保护管理。特别是加强装修阶段的成品保护管理，落实岗位责任制，杜绝或减少人为的丢失损坏现象是成品保护管理工作一项艰巨的任务。为有效地加强成品保护管理，特将成品维护的范围及措施归纳如下：\n\n1、成品保护的范围\n\nA、粗装修阶段楼内的机械设备、地面、吊顶、墙壁、玻璃幕、门、窗及供冷暖设备等。\n\nB、细装修阶段    水暖、通风系统、灯具照明系统、厨卫、水电设备、电讯器材及工程内加以保护的成品。\n\n2、成品保护工作的内容及措施\n\nA、内容   防火、防水、防盗、防破坏、防自然灾害及维护施工秩序、保护环境卫生、严禁大小便，即“五防二保护”。\n\nB、措施 勤巡视、勤观察、勤提示和报告，勤记录，即腿勤、眼勤、嘴勤、手勤、脑勤，等“五勤”。\n\n3、成品保护管理的基本原则：\n\nA、成品安装的原则是：成品已安装就位，必须按技术附加措施予以保护。只许装不许拆；准许进不许出。成品就位后，需移动、拆改、修补、维护的，应持有关负责人的批条，交成保人员后方可施工。\n\nB、成品在施工和安装过程中的原则是：谁施工、谁负责成品保护工作：成品保护人员负责监督、检查、管理。发现成品损坏要找到责任人，交有关部门解决，做好值班记录。\n\nC、现场成品保护办公室接收成品的程序是：坚持按施工工序完毕后，在甲方监督下，由施工方向成品保护队分项书面交底，填好交接清单，经验收合格后，双方签字生效。\n\nD、坚持配合，协调原则：甲、乙双方加强配合，协调意识，是搞好成品保护工作的重要原则，成保办公室应主动向甲方有关负责人汇报工作，互通情况统一认识，求得甲方支持。甲方应向成保方实行领导统一布置，统一指挥，共同朝着一个实施目标，工程进度一定能够顺利完成。\n\nE、搞好成品保护工作要有超前意识：进场前要对成品保护人员进行岗前培训，一方面进行法则，职业道德，安全教育，成品保护工作的重要性，另一方面针对性的对进住工程进行详细交底，使成品保员明确工作内容，明确责任把问题想到前面，做到会干、会说、会管理，行之有效。三、成品保护的管理办法（一）公司总监部岗位职责\n\n1、认真贯彻执行公司及甲方制定的成品保护管理办法及有关规定。\n\n2、负责现场各队的业务指导、教育管理和组织协调。\n\n3、密切与施工单位的联系，主动搞好各方面的关系，经常保持地与施工单位、合作单位及有关部门意见沟通。\n\n4、定期听取各队的工作汇报，研究分析成品保护管理工作中出现的问题及采取的措施。\n\n5、经常深入各队现场，对各队员工的思想动向、劳动纪律、业务水平、工作记录及现场的问题等进行监督检查。对有关人员及员工进行经常性的考核，以保证本公司较高的用人标准。\n\n6、协助队长对员工的思想道德教育、劳动安全教育和业务培训。\n\n7、总结各队的管理经验和先进模范事迹，以内树正气，利于工作开展；外树公司良好的形象，牢固站稳市场。\n\n8、定期向公司领导汇报，报告做到事情真实，数据准确、时效性强，有分析、有建议、有措施办法。\n\n9、对各队的工作业绩及表现，有权向公司领导提出奖罚建议。对严重违反劳动纪侓、成品保护管理制度和职工守则，损害公司形象不听劝阻的员工，有权六即解除聘用合同。\n\n10、协调好各方面关系，积极宣传公司优秀业绩，树立本公司的良好形象，在市场经济社会中不断开拓业务范围。\n\n11、以身作则，严格要求自己，忠于职守、秉公办事，不以上压人，以势欺人，做好公司领导与各队员工之间的搭桥工作，保证公司领导意图的顺利下达和现场问题的及时上传。"
+            },
+            {
+              "title": "NO.2外墙清洗",
+              "subtitle": "",
+              "articleType": "serverItem",
+              "authors": "四海日盛",
+              "thumb": "http://i2.tiimg.com/611341/91a4340f26b3305ct.jpg",
+              "description": "外墙清洗 外墙清洗是高空清洗的一种，是一种极危险的清洗作业，外墙清洗不仅要做到清洗物的干净清洁，更重要的是要在确保安全的情况下施工作业。这就要求：施工人员有着非常丰富的高空清洗实践操作经验，并有良好的管理团队和过硬的安全…",
+              "content": "   外墙清洗是高空清洗的一种，是一种极危险的清洗作业，外墙清洗不仅要做到清洗物的干净清洁，更重要的是要在确保安全的情况下施工作业。这就要求：施工人员有着非常丰富的高空清洗实践操作经验，并有良好的管理团队和过硬的安全保护措施。公司从这些方面着手首先解决了施工工具的安全性，采用双保险的跳板清洗方式，由专人负责现场施工，责任到人，严厉执行施工安全要求，竭尽全力做到在外墙清洗施工中0事故。\n\n外墙清洗的条件 \n\n1、气候条件：外墙清洗必须要在良好的气候条件下进行，风力应小于4级，4级以上停止工作。因此，工作前应测定风力，尤其是高空风力。另外，下雨、下雪、有雾、能见度差以及高温（35℃以上）和低温(0℃以下)等条件下都不适合进行外墙清洗。 \n\n2．人员条件：为了贯彻执行国家安全法规，确保工人人身安全及设备正常运转，规定：高空操作者必须是年满18周岁的男性公民，并经过身体检查和安全技术培训，经考试合格方可作业，工人上岗前不得饮酒，有感冒等身体不适症状就暂停高空作业。 \n\n3、设备条件：外墙清洗的设备必须处于良好的工作状态，凡吊板有发毛、部分绳股渐裂等现象应立即更换新绳。\n\n安全保证措施\n\n1、设置安全负责人，落实公司安全责任制，施工人员进入现场前必须进行安全教育培训、培训合格后方可上岗；\n\n2、清洁施工现场设专职维修电工，负责对所有设备的维修和检查；\n\n3、在吊顶内施工时必须使用低压照明（24伏）；\n\n4、高处作业时必须设置牢固的作业平台，保障站点牢固安全，高处作业必须使用安全绳，系安全带；现场没有挂安全带的部位，要设置安全绳；\n\n5、所用的工具及清洗剂要随用随收，不准在吊顶、设备及风管内存放；\n\n6、施工人员必须穿戴工作服、戴工作帽、防护镜及手套。其他人员进入现场必须戴安全帽、防护镜；\n\n7、进入管道内施工时首先要采取通风措施和急救措施\n\n8、工程清洗现场严禁吸烟、赌博、打闹。施工中严禁不懂装懂，不按操作规程作及野蛮施工；\n\n9、作业区隔离：应对作业区的地板、四周及机器设备采用0.15mm防火聚乙烯或其它的替代物进行隔离，隔离物的衔接处应严格密封。\n\n10、 施工现场必须配备足够的灭火器材；\n\n11、 施工现场必须建立以现场项目负责人为主的临时消防班组；\n\n12、 在施工中注意均衡施工，合理分配员工，控制疲劳施工；\n\n13、 每天收工前必须清理现场，经检查无误后业主及现场项目负责人共同检验后方可离开。\n\n14、 所有管道阀门不能拧动\n\n15、 作业人员须定期体检，凡有高血压、心脏病、贫血病、恐高症不适应高空作业的，不得从事高空作业。"
+            },
+            {
+              "title": "NO.3地毯清洗",
+              "subtitle": "",
+              "articleType": "serverItem",
+              "authors": "四海日盛",
+              "thumb": "http://i2.tiimg.com/611341/0bd65b3ad28c3139t.jpg",
+              "description": "公司地毯-清洗方法A、 泡沫地毯干洗法:先说地毯泡沫干洗，地毯干洗主要使用的工具有：中心打泡地毯清洗机、泡沫加泡箱、泡槽刷、干泡地毯水等工具。主要操作是用泡沫干洗机，采用带有旋转毛刷及植入式湿性真空吸头将大量洗涤剂喷洒在毯面绒…",
+              "content": "公司地毯-清洗方法\n\nA、 泡沫地毯干洗法:先说地毯泡沫干洗，地毯干洗主要使用的工具有：中心打泡地毯清洗机、泡沫加泡箱、泡槽刷、干泡地毯水等工具。主要操作是用泡沫干洗机，采用带有旋转毛刷及植入式湿性真空吸头将大量洗涤剂喷洒在毯面绒头上，在滚动毛刷的作用下洗涤剂清洁绒头，之后用吸尘吸水机吸去洗涤泡沫及悬浮尘土，达到清洁地毯的目的。\n\nB、干性提取清除法:将干洗粉均匀的喷撒在地毯表面，让干洗粉和地毯表面的污汁自然产生化学反应。15分钟后用专用的多功能洗地机清洗地毯，等到灰尘和污渍全部浮出地毯表面再用大功率吸尘器配合带毛刷的吸头将其灰尘吸尽，当时洗完即可使用。\n\n地毯干洗是一种表面清洁方式，其优点是可以快速去除地毯表面的油污、尘土等各种污垢，清洁后不缩水、不易退色。其缺点是仅仅只能清洁地毯表面，无法除味、杀菌，并且刷洗过程中对地毯有一定程度的损伤，特别不适合长毛的羊毛地毯。地毯水洗可深层清洁地毯，但不可使用质量差的地毯水，品质较差的地毯水不仅严重影响地毯外观，还有可能导致地毯脆化、失去弹性。"
+            },
+            {
+              "title": "NO.4工程开荒保洁",
+              "subtitle": "",
+              "articleType": "serverItem",
+              "authors": "四海日盛",
+              "thumb": "http://i2.tiimg.com/611341/3da60f21650abff1t.jpg",
+              "description": "开荒保洁 由于建筑工程中常常会遗留下许多垃圾污垢,各种地面石头,墙壁上会遗留下（一）开荒保洁所用工具大型吸尘吸水机、多功能擦地机、玻璃套装工具、加长杆、梯子、水桶、掸子、云石铲刀、刮子、涂水器等。 （二）开荒保洁所用药剂",
+              "content": "开荒保洁\n\n由于建筑工程中常常会遗留下许多垃圾污垢,各种地面石头,墙壁上会遗留下\n\n（一）开荒保洁所用工具\n\n大型吸尘吸水机、多功能擦地机、玻璃套装工具、加长杆、梯子、水桶、掸子、云石铲刀、刮子、涂水器等。 \n\n（二）开荒保洁所用药剂\n\n全能清洗剂、玻璃清洗剂、瓷砖清洗剂、去胶剂、除渍剂、洁厕剂等。\n\n（三）程序如下\n\n1、首先清理现场留下的装修垃圾；\n\n2、由上到下全面吸尘；\n\n3、擦玻璃:先用毛巾把玻璃框擦拭干净,再用涂水器沾稀释后的玻璃水溶液,均匀的从上到下涂抹玻璃,有顽固的污渍用铲刀\n清除干净,再重复以上工序后用刮子从上到下刮干净,用干毛巾擦净框上留下的水痕,玻璃上的水痕用机皮擦拭干净。\n\n4、卫生间:坚持由上而下的原则,首先认清卫生间顶子的材质,是PVC的或是铝塑板还是涂料的,再根据不同的材质用不同的\n清洁方法进行清洁；用清洁球或是板刷清洗卫生间的墙壁,着重瓷砖的缝隙,和瓷砖表面上遗留的胶迹、涂料点、水泥渍\n等；用毛巾清洁卫生间的洁具,用不锈钢清洗液针对各种龙头、管件进行清洁；用洗地机对地面进行最后的清洁,由其是地\n面的边角,用清洁球和刀片对洗地机洗不到的角落进行针对性的除污、去除水泥渍等；最后,检查无遗漏后,再用干毛巾把水\n龙头等管件擦拭一遍。 \n\n5、厨房:程序同上.注意:因厨房里的不锈钢管件比较多,应是清洁重点。\n\n6、卧室及大厅:墙壁用掸子或是吸尘器做除尘处理,擦拭灯具、开关盒、排烟置、空调口、排风口等。\n\n7、门及框:分清门的材质,用专业清洁剂稀释后,用毛巾擦拭,程序也是从上到下,把毛巾叠成方块,\n\n从门的顶部开始从左到右的擦拭,不能有遗漏,有胶渍的地方可用除胶剂做处理；框的程序同门；一定要做到无遗漏、无死\n角。 \n\n8、地角线:用毛巾擦拭,去掉各种胶迹、涂料点等。\n\n9、地面的清洗:把所有的做完以后,就是地面的清洗了,地面也要分材质,是木地板的、还是瓷砖的、或是石材的,当分清后\n就选择专用清洁剂稀释后,开始清洗.地面上的胶渍可用刀片清除,顽固的可用去胶剂处理；最后一道工序做完后,应由领班\n全面检查一遍后确认无遗留后撤离现场。."
+            },
+            {
+              "title": "NO.5石材翻新",
+              "subtitle": "",
+              "articleType": "serverItem",
+              "authors": "四海日盛",
+              "thumb": "http://i2.tiimg.com/611341/b55ac648e595e924t.jpg",
+              "description": "石材养护一、服务项目：花岗岩打蜡、大理石、水磨石、抛光，石材翻新、石材补缝、防水、晶面硬化、病变处理、防渗处理等。 二、一般操作流程：（1）打蜡、抛光石材是一种天然、环保的装饰材料，其色彩亮丽、豪华气派，所以对其的保养尤为重…",
+              "content": "石材养护\n\n一、服务项目：花岗岩打蜡、大理石、水磨石、抛光，石材翻新、石材补缝、防水、晶面硬化、病变处理、防渗处理等。 \n\n二、一般操作流程：\n\n（1）打蜡、抛光石材是一种天然、环保的装饰材料，其色彩亮丽、豪华气派，所以对其的保养尤为重要。打蜡就是密封石材表面的一些用肉眼看不到的细小孔洞，防止受到灰尘的污染和污渍的渗透，从而延长其使用寿命。1、清洗地面 使用多功能洗地机，配合吸尘吸水机及洗石水等清洁工具 和药剂进行清洗。\n\n（2）、打蜡 使用专业打蜡机配合高级石材护理蜡对石材进行打蜡处理。\n\n（3）、抛光 使用高速抛光机进行抛光，以达到光洁、亮丽的效果。\n\n三、 石材病变处理石材的主要病变为油渍、水渍、咖啡渍等有色污渍渗入石材所产生的病变，对其病变的处理，是使用专业、进口药剂去除污渍，从而使石材恢复本色。\n\n四 、 石材翻新将发生污染或病变的石材如凹凸不平的石材表面、深度划痕、深层污点等使用进口石材翻新机配合多套不同的磨盘、磨片，由粗到细，进行多次打磨、抛光，使石材在原有的基础上恢复其本来面貌。\n\n五、 晶面硬化处理石材在使用若干年后，表面会老化，严重影响美观，晶面硬化处理就是经过粉磨剂研磨，使化学药剂与石材中的钙成分发生化学反应，在石材表面形成一层新的晶化物质，防止污渍渗入石材内层，增强抗磨性，使石材折射出天然的光泽，以达到一定的硬七、 石材防水使用防水剂（合资），防止水渍、污渍、油渍及有色污渍等渗入石材产生病变。八、 大理石补缝使用补缝剂，把已铺石材邻间缝隙用相同的颜色填补，使石材达到呈现一体的效果，增加石材的美观。石材养护翻新工程起蜡清洗 充分干燥地面 填补石缝 自然风干 整平研磨抛光 锈黄处理 防护处理 水晶处理1、起蜡清洗我们采用云石专用起蜡水、经过国内外几种起蜡水的性能，价格对比，我们选择了性价比最合适的某品牌起蜡水，通过兑水调配，对石面进行了起蜡，并用专用擦地机刷洗，为了避免水太多渗入石面，我们一边擦洗，一边用吸尘吸水机吸净水蜡、污渍。 \n\n2、地成干燥本工序分两种情况操作。①原有石面接缝的水渍，我们采用远红外线灯加热烘干。②其它平面的湿气，自然晾干。结果，水渍现象已彻底去除，既经济又合理，客户十分满意。 \n\n3、填补石缝用填缝方法解决石缝渗透水是重要的预防措施。必需重视填缝工作。填缝材料应粘接性好，无粉粒，防水，可研磨抛光的，我们选用德国超级云石裂痕补剂，按照工艺进行了填隙填补（填补面同石材平面取平，填缝应均匀，防止遗漏。）并经过两小时以上的干燥固化。 \n\n4、整平研磨抛光鉴于石面以前做过防水，造成石材变色，我们并没有直接采用整平研磨的方法，而是先用O#钢丝棉，配专用设备进行研磨擦打、磨去了石材表面的变色层，显露出大花白的原有底色。很幸运，由于防护剂渗入石面的程度很轻，我们仅用用上述方案就收到了良好的效果，使我们担心的变色问题得到了治理。第二套方案即用大理石钻石磨片、水磨片、逐级打磨抛光，备而未用。\n\n5、锈黄处理根据整体方案，我们把洗手间的锈黄处理，定在防护处理工艺之前。我们先对锈斑严重的地方，用钢丝棉打磨，去除表面浮锈，然后用宝丽佳大理石除锈剂进行除锈。除锈工艺如下：清洁表面干燥 湿润锈面 贴白纸巾 加除锈剂 罩塑料薄膜密封敷面 时效处理3小时 中性清洁剂清洗 水洗 晾干 （一次性不能除净的锈迹可重新处理）\n\n6、防水、防护客户为了避免大理石今后再出现水渍、泛锈，和遭受其它污染，是意我们的方案，对研磨后地面施加防护，我们吸取了原防护变色的教训，选用几种较好的防水剂，取同样的石材做了实验，一方面检查防护效果，另一方面检查是否改变石材颜色，并根据吸水率确定工艺用量。做好了上述准备后，我们才大面积的对地面进行了防护处理。 "
+            },
+            {
+              "title": "NO.6家政服务",
+              "subtitle": "",
+              "articleType": "serverItem",
+              "authors": "四海日盛",
+              "thumb": "http://i2.tiimg.com/611341/68709d510386c239t.jpg",
+              "description": "1、建立良好的人际关系家政服务人员服务的过程首先是与雇主相处的过程，因此家政服务人员入户后，必须要和雇主建立起良好的人际关系，只有雇佣双方建立起和谐的人际关系，家政服务员在服务的过程中才能心情愉快，工作顺利。否则，双方的合…",
+              "content": "1、建立良好的人际关系\n\n家政服务人员服务的过程首先是与雇主相处的过程，因此家政服务人员入户后，必须要和雇主建立起良好的人际关系，只有雇佣双方建立起和谐的人际关系，家政服务员在服务的过程中才能心情愉快，工作顺利。否则，双方的合作将无法继续，家政服务员就会失去这份工作。要搞好与雇主的人际关系应注意以下几点：\n\n（1）做好本职工作是建立良好人际关系的前提，光说不练只会说嘴的家政服务人员根本不可能与雇主家庭建立起良好的和谐关系，家政服务人员应掌握家政服务的基本技能，能够达到雇主的服务要求。\n\n（2）尊重雇主，要尊重雇主家庭中的每一位成员，家政服务人员对待雇主家庭的每一位家庭成员都应一视同仁，不要薄此厚彼。特别是在雇主家庭成员较多服务环境中，家政服务人员不要随着雇主家庭主要成员的眼光，做看人下菜碟的事情。\n\n（3）不参与雇主家庭事务，雇主家庭成员之间如果产生一些矛盾，遇到这种情况，首先，家政服务人员不要介入雇主家庭成员的是非之中，不要充当调节人，应当置身事外，最好的办法是回避。事后，如果雇主家庭成员向家政服务人员提及此事，家政服务员也不应当对任何一方表示同情和理解，可说一些有利雇主双方有利于家庭和睦的话。\n\n2、要勤俭节约\n\n节约是一种美德，在城市生活中要特别注意对水、电的节约。国家正在处在发展阶段，能源十分紧张，特别是水的资源短缺情况，已经严重的影响到人民群众的生活。有许多家政服务员，由于长期的生活习惯不太注意节约用水、用电，如果雇主是老年人，他们特别注重节约，因此，家政服务人员应做到随手关灯，节约用水，在保证卫生的情况下要做到一水多用；在制作家庭餐的时候要把握家庭人口数量，以免发生浪费。\n\n3、学会控制自己的情绪\n\n家政服务人员在服务期间要学会控制自己的情绪变化，不要将自己的喜怒哀乐挂在脸上，这是家政服务人员特殊的服务环境所要求。家政服务人员难免在工作和生活中遇到烦心的事，如果对自己的情绪不能得到理智控制，势必会表现出来，不良情绪的流露不仅有可能造成雇主对你误解，也可能会给你的服务工作带来不良后果。因此，家政服务人员必须学会控制和调节自己的情绪。首先，要心胸开朗大度，不要小肚鸡肠；其次，遇事尽量三思而后行，避免产生不良情绪；再次，当情绪受到强烈刺激时，要有意识地用理智加以自我调节，努力克制它；最后，还必须努力学习文化知识，培养自己的道德修养，不断提高自身素质。\n\n4、学会对待工作中的挫折\n\n在现实生活中，面对遭受的挫折，不能一味地责怪自己，沉迷于痛苦之中，要多对家人和自己信赖的朋友倾诉，以得到他们的帮助。同时，松弛一下绷紧的神经，多参加自己喜欢的活动，分散注意力。此外，还要以积极主动的心理去承认它，面对它，并在朋友和家人帮助下分析挫折，找出导致挫折的关键所在，使你处于理智、冷静的状态之中。这样你不仅能正确面对它，而且也能顺利地摆脱困难。\n\n5、学会消除紧张心理\n\n当绝大多数家政服务人员初次迈进雇主家门时，都不可避免的会产生心理紧张，这是十分正常的情况。适度的紧张能提高工作效率，而且还能帮助我们适应瞬息万变的社会环境。但是，如果过度紧张，则可能会在工作中手忙脚乱，忙中有错，甚至不能适应服务环境，从而影响到正常的服务工作的开展。作为家政服务人员首次进入一个陌生的家庭，而产生一些紧张甚至有恐惧感是难免的，其实是一种极为正常的心理反应。关键是对家政服务员的职业要正确的认知，进入家庭是家政服务的职业特点，其实，与雇主之间的合作，是雇佣双方各取所需，服务人员需要一份工作，需要一份工资，雇主需要有人来承当家庭中一份不可缺少的服务工作，是各自的需求使双方走到一起。而在最初的接触中双方都会产生紧张，只是表现形式不同。关键在于雇佣双方能否进行良好沟通。\n\n6、经常与家庭保持联系\n\n常言道“儿行千里母担忧”，“家书抵万金”，这两句话反映出中国人对待亲情传统观念。外出务工人员，一旦在外地安定下来，应立即与家人取得联系，向家人报平安。在服务期间也应经常给家人打个电话或写封信，向家人讲述一下自己工作生活的情况，以免家乡亲人挂念。\n\n7、学会办理存款、汇款\n\n许多家政服务人员为了方便，喜欢将大量现金带在身上，这是一种极为不好的习惯。随身携带大量的现金，这种做法既不方便又易将钱丢失，在某些情况下还容易与雇主产生误会。家政服务人员要学会办理存款和汇款的手续。现在到银行或邮局办理存款手续十分简便，凭借本人身份证即可开户，为了保险起见还可以设立密码。要注意存折要妥善保管，密码不要告诉他人，也不要忘记。汇款，可到任何一家邮局办理，汇款时要写清收款人的姓名、详细地址。要保存好汇款单据，以被查询。注意存款、汇款都要填写真实姓名。\n\n8、生病与就医\n\n家政服务人员在服务期间，应特别注意身体健康，健康的身体是从事家政服务工作的基本条件。不要暴饮暴食，少吃生冷食物，要依据天气变化增减衣物，减少生病的机会。在服务期间发现身体不适可先向雇主咨询，如果是一般伤风感冒，可以依据情况吃家庭常备药品。当然，许多家政服务人员为了省钱常常自己去药房买药吃，这种做法不值得提倡。最好的方法应该是到附近的医院挂号看病，请医生作出病情诊断后，再按照医生要求买药服药。家政服务人员在服务期间，遇到经期自己可以适当调整工作内容，如果情况严重，可告诉女雇主请她给予适当的照顾。 "
+            },
+            {
+              "title": "NO.7消防工程",
+              "subtitle": "",
+              "articleType": "serverItem",
+              "authors": "四海日盛",
+              "thumb": "http://i2.tiimg.com/611341/c583469f92d31ad8t.jpg",
+              "description": "消防施工注意事项 1．风管要做漏光和漏风试验 漏光试验由施工单位做，每10M不多于一个漏光点（不是在风机、风阀安装后测试），在第一次做漏光试验时应作节能样板；漏风试验由建设单位委托第三方做（理由：要是在排烟时漏烟雾将会造成…",
+              "content": "消防施工注意事项\n\n1．风管要做漏光和漏风试验 漏光试验由施工单位做，每10M不多于一个漏光点（不是在风机、风阀安装后测试），在第一次做漏光试验时应作节能样板；漏风试验由建设单位委托第三方做（理由：要是在排烟时漏烟雾将会造成损失）；要掌握漏光漏风试验的要领及做法；\n\n2．见机到货应有开箱检查记录，要重点核查见机功率是否大于设计功率，另外要检查品牌的符合性；\n\n3．生活水质化验报告（进水口：水泵处，出水口：住宅末端，小于等于500户取一户，大于500小于等于1000取两处，依此类推）；\n\n4．PPR、钢塑管要有卫生及性能检测报告（两总包可共一份，每不同材质的材料各一份）；\n\n5．消防应有专门的图纸会审记录，镀锌钢管应检测镀锌层厚度；\n\n6．大于Φ110的排水管应间隔设置门型吊架，不能只采用卡箍吊架；\n\n7．风管进入风机房应安装铁皮套管，防火阀单独设吊架（风机房内）；\n\n8．消毒由施工单位进行（加漂白粉水冲洗）；\n\n9．大于1200的风管下面应做喷头，风管应做防晃支架（一般在最后固定时做）；\n\n10．电气回路的套管应采用同一种管材，不要一段采用钢管，一段采用塑料管；\n\n11．桥架直线段长度大于30米应设置伸缩节。\n\n12．消防的软接头应有不燃证，最后能现场点火试验。"
+            },
+            {
+              "title": "NO.8停车管理",
+              "subtitle": "",
+              "articleType": "serverItem",
+              "authors": "四海日盛",
+              "thumb": "http://i2.tiimg.com/611341/72e0d16ecd56ebdet.jpg",
+              "description": "一、车辆管理的方法与要求 (一)建立健全车辆管理队伍 为做好管理区域内车辆管理,提供安全有序的车辆停放管理服务,物业管理企业应根据小区车辆管理实际情况做好人员安排,包括小区车辆交通的疏导及管理人员、停车场维护人员和车辆收费…",
+              "content": "一、车辆管理的方法与要求\n\n(一)建立健全车辆管理队伍\n\n为做好管理区域内车辆管理,提供安全有序的车辆停放管理服务,物业管理企业应根据小区车辆管理实际情况做好人员安排,包括小区车辆交通的疏导及管理人员、停车场维护人员和车辆收费管理人员等。\n\n(二)车辆出入管理\n\n对物业管理区域内出入及停放的车辆,宜采用出入卡证管理。卡证根据停车场的性质采用不同的方式。一般对居住在物业区域内的业主(或物业使用人),其车辆多以办理年卡或月卡的方式管理,出入时只需出示年卡或月卡即可。外来车辆或暂时停放的车辆采用发临时卡的方式进行管理,即每次进入时发给一张临时卡,上面记录进入的时间、道口、车牌号、值班人等,此卡在车辆出去时收回。是否收费,应根据相关法规、物业类型、停车场性质和物业服务约定作相应处理。\n\n(三)车辆停放管理\n\n车辆进入管理区域后,管理人员应引导车辆停放。有固定车位而任意停放,或不按规定任意停放,或在消防通道停车等现象出现时,管理人员应及时劝阻。同时,车辆进入停放时,管理人员应及时检查车辆,观察车辆是否有损坏,车窗是否已关闭,是否有贵重物品遗留车内等,必要时做好记录并通知车主,避免出现法律纠纷。\n\n二、车辆管理注意事项\n\n(1)车辆管理的交通标识及免责告示应充足明显,避免发生法律纠纷。\n\n完善的交通标识及提示既可以确保管理区域车辆交通的有序,又可以减少安全事故的发生。而车辆停放票据、卡、证及收费牌上的相关免责提示等则可以提醒车主做好相应的安全防范措施,减少安全事件的发生,并且避免发生安全事件时引发法律纠纷。\n\n(2)车主首次申请办理停车年卡或月卡应提交本人身份证、驾驶证、车辆行驶证原件与复印件,并签订停车位使用协议,建立双方车辆停放服务关系。协议上应对车辆是有偿还是无偿停放、是保管关系还是仅仅车位租用关系、停放过程中的安全责任等法律责任问题予以明确,避免在车辆出现刮损或丢失时引起法律纠纷。\n\n(3)车辆停放必须符合消防管理要求,切忌堵塞消防通道。\n\n部分车主为了方便,经常会将车辆停放于消防通道,或部分物业公司为了提高车辆停放收入,擅自将部分消防通道划为停车位,这样往往会导致消防通道的堵塞,严重影响消防疏散及抢救。因此,车辆停放管理应特别注意对消防疏散通道的管理,确保车辆停放符合消防管理的要求,绝对不能堵塞消防通道。 "
+            },
+            {
+              "title": "NO.9拆迁工程",
+              "subtitle": "",
+              "articleType": "serverItem",
+              "authors": "四海日盛",
+              "thumb": "http://i2.tiimg.com/611341/ef6e0dbc0f520dc5t.jpg",
+              "description": "拆除工程施工注意事项一、技术准备工作1、首先熟悉被拆建筑物的设计图纸，弄清建筑物的结构情况、建筑情况、水电及设备管道情况。工地负责人要根据施工组织设计和安全技术规程向参加拆除的工作人员进行详细的交底。2、对施工员进行安全技术…",
+              "content": "拆除工程施工注意事项\n\n一、技术准备工作\n\n1、首先熟悉被拆建筑物的设计图纸，弄清建筑物的结构情况、建筑情况、水电及设备管道情况。工地负责人要根据施工组织设计和安全技术规程向参加拆除的工作人员进行详细的交底。\n\n2、对施工员进行安全技术交底，加强安全意识。对工人做好安全教育，组织工人学习安全操作规程。\n\n3、踏看施工现场，熟悉周围环境、场地、道路、水电设备管路情况及建筑物情况等。\n\n二、现场准备\n\n1、清理施工场地，保证运输道路畅通。\n\n2、施工前，先清理需要拆除部分范围内的物资、设备；将电线、水管、设备等各类管线切断或迁移；检查周围危旧房屋或构件，必要时进行临时加固；向周围群众出安民告示，在拆除危险区周围设禁区围栏、警戒标志，派专人监护，禁止非拆除人员进入施工现场。\n\n3、对于生产、使用、储存化学危险品的建筑物的拆除，要经过消防、安全部门参与审核，制定保证安全的预案，经过批准后实施。\n\n4、搭设临时防护设施，避免拆除时的砂、石、灰尘飞扬影响生产的正常进行。\n\n5、在拆除危险区设置警戒区标志。\n\n6、接引好施工用临时电源、水源，现场照明不能使用被拆建筑物内的配电设施，应另外敷设。保证施工时水电畅通。\n\n四、施工组织\n\n1、在甲方的支持下，做好群众工作，争取周边业主的配合，赢得群众的支持，派专人做好周边警戒工作。\n\n2、按施工组织设计的程序安排，首先清拆原有管线，采取人工进行拆除，划分区域，分块、逐段、逐根进行拆除。\n\n3、拆除混凝土构件时，采用人工拆除。严格控制飞石、响声、冲击波。采用湿水除尘，减少声响及冲击波，确保不扰民。\n\n4、拆除外墙、隔墙时，采用人工拆除，专人进行监测，发现情况及时联系研究，以确保施工安全。\n\n5、墙体拆除后，组织工人回收构件中有价值的可利用废品。\n\n6、不可利用废物，用汽车外运到指定地点。"
+            },
+            {
+              "title": "NO.10物业管理",
+              "subtitle": "",
+              "articleType": "serverItem",
+              "authors": "四海日盛",
+              "thumb": "http://i2.tiimg.com/611341/23924b630fbe6ef0t.jpg",
+              "description": "公共服务是指物业管理中公共性的管理和服务工作，是物业管理企业面向所有住用人提供的最基本的管理和服务。主要有以下8项：（1）房屋建筑主体的管理及住宅装修的日常监督；（2）房屋设备、设施的管理；（3）环境卫生的管理；",
+              "content": "公共服务\n\n是指物业管理中公共性的管理和服务工作，是物业管理企业面向所有住用人提供的最基本的管理和服务。主要有以下8项：\n\n（1）房屋建筑主体的管理及住宅装修的日常监督；\n\n（2）房屋设备、设施的管理；\n\n（3）环境卫生的管理；\n\n（4）绿化管理；\n\n（5）配合公安和消防部门做好住宅区内公共秩序维护工作；\n\n（6）车辆秩序管理；\n\n（7）公众代办性质的服务；\n\n（8）物业档案资料的管理\n\n针对性服务\n\n是指物业管理企业面向广大住用人，为满足其中一些住户、群体和单位的一定需要而提供的各项服务工作。\n\n①日常生活类；\n\n②商业服务类；\n\n③文化、教育、卫生、体育类；\n\n④金融服务类；\n\n⑤经纪代理中介服务；\n\n⑥社会福利类；\n\n委托性服务\n\n物业管理企业在实施物业管理时，第一大类是最基本的工作，是必须做好的。同时，根据自身的能力和住用人的要求，确定第二、第三大类中的具体服务项目与内容，采取灵活多样的经营机制和服务方式，以人为核心做好物业管理的各项管理与服务工作，并不断拓展其广度和深度。"
+            }
+          ],
+
+          for (let i = 0; i < articles.length; i++) {
+            updateArticle(articles[i])
+          }
+
+        function updateArticle(data) {
+          ajax({
+            url: "http://localhost:10007/api/article/addArticle", //请求地址
+            type: "POST", //请求方式
+            data: {
+              accessToken: '',
+              appID: '',
+              parameters: JSON.stringify({
+                // "openID": "3MjFiODU4Mjg0Zjc2NTQ3MjVhZDZhYzk0NjcxMWVlZjFi9",
+                "title": data.title,
+                "subtitle": "",
+                "articleType": "服务项目",
+                "authors": "四海日盛",
+                "linkURL": "",
+                "thumb": data.thumb,
+                "description": data.description,
+                "content": data.content,
+              })
+            }, //请求参数
+            dataType: "json",
+            success: function (response, xml) {
+              // 此处放成功后执行的代码
+              var allData = JSON.parse(response)
+              // result.innerHTML = allData.data.allMobile
+              console.log(allData);
+            },
+            fail: function (status) {
+              // 此处放失败后执行的代码
+              console.log('错误', status);
+            }
+          });
+        }
+
+      }
+
+
+      function upData() {
+        ajax({
+          url: "http://localhost:10007/api/foundation/dataHandle", //请求地址
+          type: "POST", //请求方式
+          data: {
+            accessToken: '',
+            appID: '',
+            parameters: JSON.stringify({
+              "openID": "3MjFiODU4Mjg0Zjc2NTQ3MjVhZDZhYzk0NjcxMWVlZjFi9", // 管理员OpenID加密字符串 String 非空
+              "data": val.innerHTML
+            }),
+            timezone: '8.0'
+          }, //请求参数
+          dataType: "json",
+          success: function (response, xml) {
+            // 此处放成功后执行的代码
+            var allData = JSON.parse(response)
+            // result.innerHTML = allData.data.allMobile
+            var o = allData;
+            console.log(o);
+            let itemType = o.data.allMobile;
+            for (let item of itemType) {
+              switch (item.typeCode) {
+                case "A":
+
+                  break;
+
+                case "B":
+
+                  break;
+
+                case "C":
+
+                  break;
+
+                case "D":
+
+                  break;
+                case "E":
+
+                  break;
+
+                case "F":
+
+                  break;
+
+                default:
+                  break;
+              }
+            }
+          },
+          fail: function (status) {
+            // 此处放失败后执行的代码
+            console.log('错误', status);
+          }
+        });
+      }
+
+      function like() {
+        ajax({
+          url: "http://localhost:10007/api/planning/like",
+          type: "post",
+          data: {
+            parameters: JSON.stringify({
+              start: {
+                tn: 1969,
+                ty: 4,
+                tr: 5,
+                // th,
+                // tm,
+                // ts,
+                // tms
+              },
+              cur: {
+                cn: 1970,
+                cy: 1,
+                cr: 10,
+                ch: 0,
+                cm: 0,
+                cs: 0,
+                cms: 0
+              }
+            })
+          },
+          dataType: 'json',
+          success: function (req) {
+            console.log(req);
+          },
+          fail: function (status) {
+            console.log(status);
+          }
+        })
+      }
+
+      function lotto() {
+        ajax({
+          url: "http://localhost:10007/api/foundation/lotto",
+          type: "POST",
+          data: {
+            parameters: JSON.stringify({
+              openID: "8MjM4OTljZTUzODJlYzQyYzc4ZDU1YjViNDRkYmY0NmRm4",
+              param: '我是请求参数！！！'
+            })
+          },
+          dataType: 'json',
+          success: function (res, xml) {
+            console.log("res:", res);
+            // console.log("xml:", xml);
+          },
+          fail: function (status) {
+            console.error('请求错误', status);
+          }
+        })
+      }
+
+      function lottoRule() {
+        ajax({
+          url: "http://localhost:10007/api/foundation/lottoRule",
+          type: "POST",
+          data: {
+            parameters: JSON.stringify({
+              openID: "8MjM4OTljZTUzODJlYzQyYzc4ZDU1YjViNDRkYmY0NmRm4",
+              rule: {
+                a: 3,
+                b: 8,
+                c: 2,
+                d: 7,
+                e: 10
+              }
+            })
+          },
+          dataType: 'json',
+          success: function (res, xml) {
+            console.log("res:", res);
+            // console.log("xml:", xml);
+          },
+          fail: function (status) {
+            console.error('请求错误', status);
+          }
+        })
+      }
+
+      function lottoQuery() {
+        ajax({
+          url: "http://localhost:10007/api/foundation/lottoQuery",
+          type: "POST",
+          data: {
+            parameters: JSON.stringify({
+              openID: "8MjM4OTljZTUzODJlYzQyYzc4ZDU1YjViNDRkYmY0NmRm4",
+              param: '我是请求参数！！！'
+            })
+          },
+          dataType: 'json',
+          success: function (res, xml) {
+            console.log("res:", res);
+            // console.log("xml:", xml);
+          },
+          fail: function (status) {
+            console.error('请求错误', status);
+          }
+        })
+      }
+
+      function ajax(options) {
+        options = options || {};
+        options.type = (options.type || "GET").toUpperCase();
+        options.dataType = options.dataType || "json";
+        var params = formatParams(options.data);
+
+        //创建 - 非IE6 - 第一步
+        if (window.XMLHttpRequest) {
+          var xhr = new XMLHttpRequest();
+        } else { //IE6及其以下版本浏览器
+          var xhr = new ActiveXObject('Microsoft.XMLHTTP');
+        }
+
+        //接收 - 第三步
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            var status = xhr.status;
+            if (status >= 200 && status < 300) {
+              console.log("xhr callback", xhr);
+              options.success && options.success(xhr.responseText, xhr.responseXML);
+            } else {
+              options.fail && options.fail(status);
+            }
+          }
+        }
+
+        //连接 和 发送 - 第二步
+        if (options.type == "GET") {
+          xhr.open("GET", options.url + "?" + params, true);
+          xhr.send(null);
+        } else if (options.type == "POST") {
+          xhr.open("POST", options.url, true);
+          //设置表单提交时的内容类型
+          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xhr.send(params);
+        }
+      }
+      // 格式化参数
+      function formatParams(data) {
+        var arr = [];
+        for (var name in data) {
+          arr.push(encodeURIComponent(name) + "=" + encodeURIComponent(data[name]));
+        }
+        arr.push(("v=" + Math.random()).replace(".", ""));
+        console.log(arr);
+        return arr.join("&");
+      }
+    </script>
+
+  </div>
+
+
+
+
+
+  <br>
+  <br>
+  <br>
+  <br>
+  <br> -------------------异步上传 分割线-----------------------
+  <div>
+    <h1>Sending forms with pure AJAX</h1>
+
+    <h2>Using the GET method</h2>
+
+    <form action="http://localhost:10007/service/upload/imgUpload" method="get" onsubmit="AJAXSubmit(this); return false;">
+      <fieldset>
+        <legend>Registration example</legend>
+        <p>
+          First name:
+          <input type="text" name="firstname" />
+          <br /> Last name:
+          <input type="text" name="lastname" />
+        </p>
+        <p>
+          <input type="submit" value="Submit" />
+        </p>
+      </fieldset>
+    </form>
+
+    -------------------分割线1-----------------------
+    <img src="http://static.tietuku.com/img/upbtn.png" alt="tietuku" style="cursor:pointer" onclick="tietuku_upload()" />
+    <button onclick="tietuku_upload()">上传按钮</button>
+    <script language="javascript" type="text/javascript" src="http://static.tietuku.com/static/open/tietuku.jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="http://static.tietuku.com/static/open/tietuku.dialog.js?1"></script>
+    <script>
+      var jq = jQuery.noConflict();
+
+      function tietuku_upload() {
+        jq.dialog.showIframeDialog(850, '',
+          '<iframe frameborder="0" width="824" height="460" marginheight="0" marginwidth="0"  src="http://static.tietuku.com/upByPlugn?token=3e42187b7adc1dea2ba2f96c5f41b5d8ae302f6c:rXTLNRd7jrPJpAVqSTAY_-D5psg=:eyJkZWFkbGluZSI6MTUzMDg2ODUzNiwiYWN0aW9uIjoiZ2V0IiwidWlkIjoiNjExMzQxIiwiYWlkIjoiMTQ0NjQ4MCIsImZyb20iOiJmaWxlIn0=&ifr=1&"></iframe>'
+        );
+      }
+      var $ = jQuery.noConflict();
+    </script>
+    -------------------分割线2-----------------------
+
+
+    <h2>Using the POST method</h2>
+    <h3>Enctype: application/x-www-form-urlencoded (default)</h3>
+
+    <form action="http://localhost:10007/service/upload/imgUpload" method="post" onsubmit="AJAXSubmit(this); return false;">
+      <fieldset>
+        <legend>Registration example</legend>
+        <p>
+          First name:
+          <input type="text" name="firstname" />
+          <br /> Last name:
+          <input type="text" name="lastname" />
+        </p>
+        <p>
+          <input type="submit" value="Submit" />
+        </p>
+      </fieldset>
+    </form>
+
+    <h3>Enctype: text/plain</h3>
+
+    <form action="http://localhost:10007/service/upload/imgUpload" method="post" enctype="text/plain" onsubmit="AJAXSubmit(this); return false;">
+      <fieldset>
+        <legend>Registration example</legend>
+        <p>
+          Your name:
+          <input type="text" name="user" />
+        </p>
+        <p>
+          Your message:
+          <br />
+          <textarea name="message" cols="40" rows="8"></textarea>
+        </p>
+        <p>
+          <input type="submit" value="Submit" />
+        </p>
+      </fieldset>
+    </form>
+
+    <h3>Enctype: multipart/form-data</h3>
+
+    <form action="http://localhost:10007/service/upload/imgUpload" method="post" enctype="multipart/form-data" onsubmit="AJAXSubmit(this); return false;">
+      <fieldset>
+        <legend>Upload example</legend>
+
+        <select name="image_type">
+          <option>利益1</option>
+          <option>tema1</option>
+          <option>Protect</option>
+          <option>Protect2</option>
+          <option>Protect3</option>
+          <option>Protect4</option>
+          <option>Protect5</option>
+          <option>Protect6</option>
+          <option>Protect7</option>
+          <option>Protect8</option>
+        </select>
+
+        <p>
+          Post your photos:
+          <input type="file" accept="image/*" multiple name="photos">
+        </p>
+
+        <p>
+          <input type="submit" value="Submit" />
+        </p>
+      </fieldset>
+    </form>
+    <!--  <form action="http://localhost:10007/api/upload/imgUpload" method="post" enctype="multipart/form-data" onsubmit="AJAXSubmit(this); return false;">
+      <fieldset>
+        <legend>Upload example</legend>
+        <p>
+          First name:
+          <input type="text" name="firstname" />
+          <br /> Last name:
+          <input type="text" name="lastname" />
+          <br /> Sex:
+          <input id="sex_male" type="radio" name="sex" value="male" />
+          <label for="sex_male">Male</label>
+          <input id="sex_female" type="radio" name="sex" value="female" />
+          <label for="sex_female">Female</label>
+          <br /> Password:
+          <input type="password" name="secret" />
+          <br /> What do you prefer:
+          <select name="image_type">
+            <option>Books</option>
+            <option>Cinema</option>
+            <option>TV</option>
+          </select>
+        </p>
+        <p>
+          Post your photos:
+          <input type="file" multiple name="photos[]">
+        </p>
+        <p>
+          <input id="vehicle_bike" type="checkbox" name="vehicle[]" value="Bike" />
+          <label for="vehicle_bike">I have a bike</label>
+          <br />
+          <input id="vehicle_car" type="checkbox" name="vehicle[]" value="Car" />
+          <label for="vehicle_car">I have a car</label>
+        </p>
+        <p>
+          Describe yourself:
+          <br />
+          <textarea name="description" cols="50" rows="8"></textarea>
+        </p>
+        <p>
+          <input type="submit" value="Submit" />
+        </p>
+      </fieldset>
+    </form> -->
+    -------------------分割线-----------------------
+    <script>
+      "use strict";
+
+      if (!XMLHttpRequest.prototype.sendAsBinary) {
+        XMLHttpRequest.prototype.sendAsBinary = function (sData) {
+          var nBytes = sData.length,
+            ui8Data = new Uint8Array(nBytes);
+          for (var nIdx = 0; nIdx < nBytes; nIdx++) {
+            ui8Data[nIdx] = sData.charCodeAt(nIdx) & 0xff;
+          }
+          /* send as ArrayBufferView...: */
+          this.send(ui8Data);
+          /* ...or as ArrayBuffer (legacy)...: this.send(ui8Data.buffer); */
+        };
+      }
+
+
+      /*\
+      |*|
+      |*|  :: AJAX Form Submit Framework ::
+      |*|
+      |*|  https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest/Using_XMLHttpRequest
+      |*|
+      |*|  This framework is released under the GNU Public License, version 3 or later.
+      |*|  http://www.gnu.org/licenses/gpl-3.0-standalone.html
+      |*|
+      |*|  Syntax:
+      |*|
+      |*|   AJAXSubmit(HTMLFormElement);
+      \*/
+
+      var AJAXSubmit = (function () {
+
+        function ajaxSuccess() {
+          /* console.log("AJAXSubmit - Success!"); */
+          console.log(111, this.responseText);
+          alert(this.responseText);
+          /* you can get the serialized data through the "submittedData" custom property: */
+          /* alert(JSON.stringify(this.submittedData)); */
+        }
+
+        function submitData(oData) {
+          /* the AJAX request... */
+          var oAjaxReq = new XMLHttpRequest();
+
+          oAjaxReq.submittedData = oData;
+
+          oAjaxReq.onload = ajaxSuccess;
+
+          if (oData.technique === 0) {
+            /* method is GET */
+            oAjaxReq.open(
+              "get",
+              oData.receiver.replace(
+                /(?:\?.*)?$/,
+                oData.segments.length > 0 ? "?" + oData.segments.join("&") : ""),
+              true);
+            oAjaxReq.send(null);
+          } else {
+            /* method is POST */
+            oAjaxReq.open("post", oData.receiver, true);
+            if (oData.technique === 3) {
+              /* enctype is multipart/form-data */
+              var sBoundary = "---------------------------" + Date.now().toString(16);
+              oAjaxReq.setRequestHeader("Content-Type", "multipart\/form-data; boundary=" + sBoundary);
+              /*  oAjaxReq.send("--" + sBoundary + "\r\n" + oData.segments.join("--" + sBoundary + "\r\n") +
+                 "--" +
+                 sBoundary + "--\r\n"); */
+              oAjaxReq.sendAsBinary("--" + sBoundary + "\r\n" + oData.segments.join("--" + sBoundary + "\r\n") +
+                "--" +
+                sBoundary + "--\r\n");
+              console.log("--" + sBoundary + "\r\n" + oData.segments.join("--" + sBoundary + "\r\n") +
+                "--" +
+                sBoundary + "--\r\n");
+            } else {
+              /* enctype is application/x-www-form-urlencoded or text/plain */
+              oAjaxReq.setRequestHeader("Content-Type", oData.contentType);
+              oAjaxReq.send(oData.segments.join(oData.technique === 2 ? "\r\n" : "&"));
+            }
+          }
+        }
+
+        function processStatus(oData) {
+          // if (oData.status > 0) {
+          //   return;
+          // }
+
+          if (oData.status > 0) return;
+
+          /* the form is now totally serialized! do something before sending it to the server... */
+          /* doSomething(oData); */
+          /* console.log("AJAXSubmit - The form is now serialized. Submitting..."); */
+
+          submitData(oData);
+        }
+
+        function pushSegment(oFREvt) {
+          // console.log(oFREvt, 'ofrevt');
+          this.owner.segments[this.segmentIdx] += oFREvt.target.result + "\r\n";
+          this.owner.status--;
+          // console.log("owner", this.owner);
+          processStatus(this.owner);
+        }
+
+        function plainEscape(sText) {
+          /* how should I treat a text/plain form encoding? what characters are not allowed? this is what I suppose...: */
+          /* "4\3\7 - Einstein said E=mc2" ----> "4\\3\\7\ -\ Einstein\ said\ E\=mc2" */
+          return sText.replace(/[\s\=\\]/g, "\\$&");
+        }
+
+        function SubmitRequest(oTarget) {
+          var nFile, sFieldType, oField, oSegmReq, oFile, bIsPost = oTarget.method.toLowerCase() === "post";
+          /* console.log("AJAXSubmit - Serializing form..."); */
+          // console.log(nFile, sFieldType, oField, oSegmReq, oFile, bIsPost); // bIsPost 确定是否为post请求
+          this.contentType = bIsPost && oTarget.enctype ? oTarget.enctype : "application\/x-www-form-urlencoded";
+          // console.log(this, 1212, oTarget); // this 指向函数本身，oTarget 指向 form 表单
+
+          this.technique = bIsPost ? this.contentType === "multipart\/form-data" ? 3 : this.contentType ===
+            "text\/plain" ? 2 : 1 : 0; // 编码类型
+
+          this.receiver = oTarget.action; // 接口地址
+          // console.log(this.receiver);
+
+          this.status = 0;
+          this.segments = [];
+
+          var fFilter = this.technique === 2 ? plainEscape : escape;
+          // console.log("fFilter:", fFilter); // 编码方法
+
+          for (var nItem = 0; nItem < oTarget.elements.length; nItem++) {
+            oField = oTarget.elements[nItem]; // form 表单 的每一项
+            // console.log("oField", oField);
+            // console.log(oField.getAttribute("type"), 'type');
+
+            if (!oField.hasAttribute("name")) {
+              continue; // 如果 当前项没有 "name" property
+            }
+
+            sFieldType = oField.nodeName.toUpperCase() === "INPUT" ? oField.getAttribute("type").toUpperCase() :
+              "TEXT"; // 判断 表单 标签 属性
+
+
+            if (sFieldType === "FILE" && oField.files.length > 0) {
+              if (this.technique === 3) {
+                /* enctype is multipart/form-data */
+                for (nFile = 0; nFile < oField.files.length; nFile++) {
+                  oFile = oField.files[nFile];
+                  console.log(oFile, 'oFile'); // File 
+
+                  oSegmReq = new FileReader();
+                  /* (custom properties:) */
+                  oSegmReq.segmentIdx = this.segments.length;
+                  oSegmReq.owner = this;
+                  /* (end of custom properties) */
+                  oSegmReq.onload = pushSegment;
+                  this.segments.push("Content-Disposition: form-data; name=\"" + oField.name + "\"; filename=\"" +
+                    encodeURI(oFile.name) + "\"\r\nContent-Type: " + oFile.type + "\r\n\r\n"); //  encodeURI(oFile.name) 中文名转码
+                  this.status++;
+                  // oSegmReq.readAsArrayBuffer(oFile);
+                  oSegmReq.readAsBinaryString(oFile);
+                  console.log(JSON.stringify(oSegmReq), 'osegmreq'); // FileReader
+                }
+              } else {
+                /* enctype is application/x-www-form-urlencoded or text/plain or method is GET: files will not be sent! */
+                for (nFile = 0; nFile < oField.files.length; this.segments.push(fFilter(oField.name) + "=" +
+                    fFilter(
+                      oField.files[nFile++].name)));
+              }
+            } else if ((sFieldType !== "RADIO" && sFieldType !== "CHECKBOX") || oField.checked) {
+              /* field type is not FILE or is FILE but is empty */
+              this.segments.push(
+                this.technique === 3 ? /* enctype is multipart/form-data */
+                "Content-Disposition: form-data; name=\"" + oField.name + "\"\r\n\r\n" + oField.value + "\r\n" :
+                /* enctype is application/x-www-form-urlencoded or text/plain or method is GET */
+                fFilter(oField.name) + "=" + fFilter(oField.value)
+              );
+            }
+          }
+          processStatus(this);
+          console.log("this:::", this);
+        }
+
+        return function (oFormElement) {
+          console.log(oFormElement.action);
+          if (!oFormElement.action) {
+            return;
+          }
+          new SubmitRequest(oFormElement);
+        };
+
+      })();
+    </script>
+    <!-- <div>
+
+      "use strict"; if (!XMLHttpRequest.prototype.sendAsBinary) { XMLHttpRequest.prototype.sendAsBinary = function (sData) { var
+      nBytes = sData.length, ui8Data = new Uint8Array(nBytes); for (var nIdx = 0; nIdx
+      < nBytes; nIdx++) { ui8Data[nIdx]=s Data.charCodeAt(nIdx) & 0xff; } /* send as ArrayBufferView...: */ this.send(ui8Data);
+      /* ...or as ArrayBuffer (legacy)...: this.send(ui8Data.buffer); */ }; } /*\ |*| |*| :: AJAX Form Submit Framework ::
+        |*| |*| https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest/Using_XMLHttpRequest |*| |*| This framework is
+        released under the GNU Public License, version 3 or later. |*| http://www.gnu.org/licenses/gpl-3.0-standalone.html
+        |*| |*| Syntax: |*| |*| AJAXSubmit(HTMLFormElement); \*/ var AJAXSubmit=( function () { function ajaxSuccess() { /*
+        console.log( "AJAXSubmit - Success!"); */ console.log(111, this.responseText); alert(this.responseText); /* you can
+        get the serialized data through the "submittedData" custom property: */ /* alert(JSON.stringify(this.submittedData));
+        */ } function submitData(oData) { /* the AJAX request... */ var oAjaxReq=n ew XMLHttpRequest(); oAjaxReq.submittedData=o
+        Data; oAjaxReq.onload=a jaxSuccess; if (oData.technique===0 ) { /* method is GET */ oAjaxReq.open( "get", oData.receiver.replace(
+      /(?:\?.*)?$/, oData.segments.length> 0 ? "?" + oData.segments.join("&") : ""), true); oAjaxReq.send(null); } else { /* method is POST */ oAjaxReq.open("post",
+        oData.receiver, true); if (oData.technique === 3) { /* enctype is multipart/form-data */ var sBoundary = "---------------------------"
+        + Date.now().toString(16); oAjaxReq.setRequestHeader("Content-Type", "multipart\/form-data; boundary=" + sBoundary);
+        /* oAjaxReq.send("--" + sBoundary + "\r\n" + oData.segments.join("--" + sBoundary + "\r\n") + "--" + sBoundary +
+        "--\r\n"); */ oAjaxReq.sendAsBinary("--" + sBoundary + "\r\n" + oData.segments.join("--" + sBoundary + "\r\n") +
+        "--" + sBoundary + "--\r\n"); } else { /* enctype is application/x-www-form-urlencoded or text/plain */ oAjaxReq.setRequestHeader("Content-Type",
+        oData.contentType); oAjaxReq.send(oData.segments.join(oData.technique === 2 ? "\r\n" : "&")); } } } function processStatus(oData)
+        { // if (oData.status > 0) { // return; // } if (oData.status > 0) return; /* the form is now totally serialized!
+        do something before sending it to the server... */ /* doSomething(oData); */ /* console.log("AJAXSubmit - The form
+        is now serialized. Submitting..."); */ submitData(oData); } function pushSegment(oFREvt) { console.log(oFREvt, 'ofrevt');
+        this.owner.segments[this.segmentIdx] += oFREvt.target.result + "\r\n"; this.owner.status--; console.log("owner",
+        this.owner); processStatus(this.owner); } function plainEscape(sText) { /* how should I treat a text/plain form encoding?
+        what characters are not allowed? this is what I suppose...: */ /* "4\3\7 - Einstein said E=mc2" -- "4\\3\\7\ -\
+        Einstein\ said\ E\=mc2" */ return sText.replace(/[\s\=\\]/g, "\\$&"); } function SubmitRequest(oTarget) { var nFile,
+        sFieldType, oField, oSegmReq, oFile, bIsPost = oTarget.method.toLowerCase() === "post"; /* console.log("AJAXSubmit
+        - Serializing form..."); */ // console.log(nFile, sFieldType, oField, oSegmReq, oFile, bIsPost); // bIsPost 确定是否为post请求
+        this.contentType = bIsPost && oTarget.enctype ? oTarget.enctype : "application\/x-www-form-urlencoded"; // console.log(this,
+        1212, oTarget); // this 指向函数本身，oTarget 指向 form 表单 this.technique = bIsPost ? this.contentType === "multipart\/form-data"
+        ? 3 : this.contentType === "text\/plain" ? 2 : 1 : 0; // 编码类型 this.receiver = oTarget.action; // 接口地址 // console.log(this.receiver);
+        this.status = 0; this.segments = []; var fFilter = this.technique === 2 ? plainEscape : escape; console.log("fFilter:",
+        fFilter); // 编码方法 for (var nItem = 0; nItem
+        < oTarget.elements.length; nItem++) { oField=o Target.elements[nItem]; // form 表单 的每一项 // console.log( "oField", oField);
+          console.log(oField.getAttribute( "type"), 'type'); if (!oField.hasAttribute( "name")) { continue; // 如果 当前项没有
+          "name" property } sFieldType=o Field.nodeName.toUpperCase()==="INPUT" ? oField.getAttribute( "type").toUpperCase() :
+          "TEXT"; // 判断 表单 标签 属性 if (sFieldType==="FILE" && oField.files.length> 0) { if (this.technique === 3) { /* enctype is multipart/form-data */ for (nFile = 0; nFile
+          < oField.files.length; nFile++) { oFile=o Field.files[nFile]; console.log(oFile, 'oFile'); // File oSegmReq=n ew FileReader();
+          /* (custom properties:) */ oSegmReq.segmentIdx=t his.segments.length; oSegmReq.owner=t his; /* (end of custom properties)
+            */ oSegmReq.onload=p ushSegment; this.segments.push( "Content-Disposition: form-data; name=\"
+            " + oField.name + "\ "; filename=\" " +
+                    oFile.name + "\ "\r\nContent-Type: " + oFile.type + "\r\n\r\n"); this.status++; // oSegmReq.readAsArrayBuffer(oFile);
+            oSegmReq.readAsBinaryString(oFile); console.log(oSegmReq, 'osegmreq'); // FileReader } } else { /* enctype is application/x-www-form-urlencoded
+            or text/plain or method is GET: files will not be sent! */ for (nFile=0 ; nFile < oField.files.length; this.segments.push(fFilter(oField.name)
+            + "=" + fFilter( oField.files[nFile++].name))); } } else if ((sFieldType !=="RADIO" && sFieldType !=="CHECKBOX"
+            ) || oField.checked) { /* field type is not FILE or is FILE but is empty */ this.segments.push( this.technique===3
+            ? /* enctype is multipart/form-data */ "Content-Disposition: form-data; name=\" " + oField.name + "\ "\r\n\r\n"
+            + oField.value + "\r\n" : /* enctype is application/x-www-form-urlencoded or text/plain or method is GET */ fFilter(oField.name)
+            + "=" + fFilter(oField.value) ); } } processStatus(this); console.log( "this:::", this); } return function (oFormElement)
+            { console.log(oFormElement.action); if (!oFormElement.action) { return; } new SubmitRequest(oFormElement); }; })();
+            </div>
+
+    </div> -->
+
+
+</body>
+
+<!-- <script>
+  console.log(moment().weeks());
+  var imgIpt = document.getElementById('img')
+  imgIpt.onchange = function () {
+    // var files = Array.prototype.slice.call(this.files);
+    // console.log(files);
+    console.log(this.files);
+  }
+</script>
+ -->
+
+</html>

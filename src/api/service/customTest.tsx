@@ -1,0 +1,6 @@
+[
+        {
+                "articleMark": "TEAM",
+                "articleLang": "en"
+        }
+]

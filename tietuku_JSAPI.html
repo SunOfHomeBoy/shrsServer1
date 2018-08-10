@@ -1,0 +1,54 @@
+<!--这只是简单的js请求上传的示例，仅供参考-->
+<meta charset="utf-8" />
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="http://common.jb51.net/jslib/jquery/jquery.min.js"></script> -->
+<form enctype="multipart/form-data">
+    <input name="file" type="file" id="file" />
+    <!--贴图库Token-->
+    <input name="Token" type="hidden" id="Token" value="55db290787786fca3916701082583d13f8e6f4b4:leT7VVlBypxaq7LaVNMG-Ulz1TI=:eyJkZWFkbGluZSI6MTQ5NTU5MTQ1NywiYWN0aW9uIjoiZ2V0IiwidWlkIjoiMTk0OSIsImFpZCI6IjM0OTAiLCJmcm9tIjoiZmlsZSJ9"
+    />
+    <input type="button" value="Upload" />
+</form>
+<progress style="display:none"></progress>
+<div id="res"></div>
+<script>
+    $(':button').click(function () {
+        var formData = new FormData($('form')[0]);
+        $.ajax({
+            url: 'http://up.imgapi.com/',
+            type: 'POST',
+            xhr: function () {
+                myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) {
+                    myXhr.upload.addEventListener('progress', progressHandlingFunction, false);
+                }
+                return myXhr;
+            },
+            beforeSend: function () {
+                $('progress').show();
+            },
+            success: function (data) {
+                console.log(data);
+                $('#res').html(JSON.stringify(data));
+                alert("上传成功，linkurl:" + data.linkurl);
+                //window.location.reload();
+            },
+            error: function (data) {
+                console.log(data);
+            },
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    });
+
+    function progressHandlingFunction(e) {
+        if (e.lengthComputable) {
+            $('progress').attr({
+                value: e.loaded,
+                max: e.total
+            });
+        }
+    }
+</script>
