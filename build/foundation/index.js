@@ -1,7 +1,5 @@
 "use strict";
 exports.__esModule = true;
-var jpush_1 = require("./jpush");
-exports.jpush = jpush_1["default"];
 var log_1 = require("./log");
 exports.log = log_1["default"];
 var mongodb_1 = require("./mongodb");

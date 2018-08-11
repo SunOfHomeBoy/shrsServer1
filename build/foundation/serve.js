@@ -45,7 +45,7 @@ var serve = (function () {
         app.set('env', process.env.NODE_ENV || 'development');
         app.set('port', configures.port || setting_1["default"].port);
         app.use('/', function (req, res, next) {
-            console.log("ok");
+            console.log("ok123");
             res.end('good111');
         });
         return app;

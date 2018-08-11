@@ -1,4 +1,4 @@
-import jpush from './jpush'
+// import jpush from './jpush'
 import log from './log'
 import mongodb from './mongodb'
 import payment from './payment'
@@ -15,7 +15,7 @@ import vedio from './vedio'
 import award from './award'
 
 export {
-        jpush,
+        // jpush,
         log,
         mongodb,
         IResult,

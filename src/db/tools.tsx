@@ -1,4 +1,4 @@
-import { utils, schema, payment, token, vedio, sms, jpush } from '../foundation'
+import { utils, schema, payment, token, vedio, sms } from '../foundation'
 
 //vedio.registerMember('0e0e8771fa-0838-46b7-8c85-3d0e7a4428bf').then(callback => console.log(callback))
 //vedio.onlineMember('0e0e8771f-0838-46b7-8c85-3s0e7a4428bf').then(callback => console.log(callback))
