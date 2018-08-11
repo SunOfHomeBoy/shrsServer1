@@ -52,7 +52,8 @@ export default class serve {
                 let master = pm.createMaster({
                         pidfile: path.join(setting.pathTmpdir, this.configures.name + '.pid')
                 })
-                console.log(path.join(rootPath, this.configures.name + '-worker.js'));
+                console.log('configuresName:::', this.configures.name);
+                console.log('path:::', path.join(rootPath, this.configures.name + '-worker.js'));
                 master.register(this.configures.name, path.join(rootPath, this.configures.name + '-worker.js'), {
                         listen: setting.masters,
                         addr: process.env.NODE_ENV === 'production' ? '127.0.0.1' : '0.0.0.0'
@@ -121,8 +122,9 @@ export default class serve {
                 //                 res.end(dev.render({ pathinfo: req.path }))
                 //         })
                 // }
-                app.use('/',(req, res, next) => {
-                        res.end('good')
+                app.use('/', (req, res, next) => {
+                        console.log("ok");
+                        res.end('good111')
                 })
                 // app.use('/service/upload/imgUpload', multiparty(), (req: express.Request, res: express.Response, next: any) => {
                 //         upload(req, res, next).then((callback) => {
@@ -131,7 +133,7 @@ export default class serve {
                 //                 res.header('Content-Type', 'application/json')
                 //                 res.status(callback.code < 1000 ? callback.code : 200).end(JSON.stringify(callback))
                 //         })
-                     
+
                 // })
 
                 // app.use((req: express.Request, res: express.Response, next: any) => {
@@ -176,7 +178,7 @@ export default class serve {
                 //         }
 
                 //         // console.log("session::", requestData.SESSION());
-                     
+
                 //         let url = requestData.getHeader("Origin");
                 //         responseData.setHeader('Access-Control-Allow-Origin', url)
                 //         responseData.setHeader('Access-Control-Allow-Methods', 'POST')

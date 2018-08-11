@@ -25,7 +25,8 @@ var serve = (function () {
         var master = pm.createMaster({
             pidfile: path.join(setting_1["default"].pathTmpdir, this.configures.name + '.pid')
         });
-        console.log(path.join(rootPath, this.configures.name + '-worker.js'));
+        console.log('configuresName:::', this.configures.name);
+        console.log('path:::', path.join(rootPath, this.configures.name + '-worker.js'));
         master.register(this.configures.name, path.join(rootPath, this.configures.name + '-worker.js'), {
             listen: setting_1["default"].masters,
             addr: process.env.NODE_ENV === 'production' ? '127.0.0.1' : '0.0.0.0'
@@ -44,7 +45,8 @@ var serve = (function () {
         app.set('env', process.env.NODE_ENV || 'development');
         app.set('port', configures.port || setting_1["default"].port);
         app.use('/', function (req, res, next) {
-            res.end('good');
+            console.log("ok");
+            res.end('good111');
         });
         return app;
     };

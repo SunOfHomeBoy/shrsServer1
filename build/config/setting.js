@@ -14,5 +14,5 @@ exports["default"] = {
         : '/mnt/www/PUBLIC',
     pathTmpdir: process.env.NODE_ENV !== 'production'
         ? path.join(__dirname, '../../tmp')
-        : '/mnt/www/tmp'
+        : '/mnt/d/tmp'
 };
