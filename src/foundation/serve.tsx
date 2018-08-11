@@ -123,7 +123,7 @@ export default class serve {
                 //         })
                 // }
                 app.use('/', (req, res, next) => {
-                        console.log("ok");
+                        console.log("ok123");
                         res.end('good111')
                 })
                 // app.use('/service/upload/imgUpload', multiparty(), (req: express.Request, res: express.Response, next: any) => {
