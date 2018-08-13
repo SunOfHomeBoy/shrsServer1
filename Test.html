@@ -185,9 +185,10 @@
       }
 
       function searchArticle() {
+        console.log("diaoyong!!!");
         ajax({
           // url:"http://123.58.7.38:8080/cgi-bin/api/article/searchArticle", //请求地址
-          url:"http://localhost:10007/api/article/searchArticle", //请求地址
+          url:"http://127.0.0.1:10007/api/article/searchArticle", //请求地址
           type: "POST", //请求方式
           data: {
             parameters: JSON.stringify({
@@ -199,7 +200,7 @@
             // 此处放成功后执行的代码
             var allData = JSON.parse(response)
             // result.innerHTML = allData.data.allMobile
-            console.log(allData);
+            console.log('123456', allData);
           },
           fail: function (status) {
             // 此处放失败后执行的代码

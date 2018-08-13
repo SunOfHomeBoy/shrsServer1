@@ -76,133 +76,129 @@ export default class serve {
                 app.set('env', process.env.NODE_ENV || 'development')
                 app.set('port', configures.port || setting.port)
 
-                // app.use(compression())
-                // app.use('/public', express.static(setting.pathPublic))
-                // app.use('/assets', express.static(setting.pathAssets))
-                // app.use(bodyParser.json({ limit: '50mb' }))
-                // app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
-                // app.use(cookieParser())
+                app.use(compression())
+                app.use('/public', express.static(setting.pathPublic))
+                app.use('/assets', express.static(setting.pathAssets))
+                app.use(bodyParser.json({ limit: '50mb' }))
+                app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
+                app.use(cookieParser())
 
-                // app.use(session({
-                //         secret: 'shrs',
-                //         name: 'shrsID',   //这里的name值得是cookie的name，默认cookie的name是：connect.sid
-                //         cookie: {
-                //                 // domain: '192.168.0.191:8081',
-                //                 httpOnly: true,
-                //                 // maxAge: 1800000
-                //         },  //设置maxAge是80000ms，即80s后session和相应的cookie失效过期
-                //         resave: false,
-                //         saveUninitialized: true,
-                // }))
+                app.use(session({
+                        secret: 'shrs',
+                        name: 'shrsID',   //这里的name值得是cookie的name，默认cookie的name是：connect.sid
+                        cookie: {
+                                // domain: '192.168.0.191:8081',
+                                httpOnly: true,
+                                // maxAge: 1800000
+                        },  //设置maxAge是80000ms，即80s后session和相应的cookie失效过期
+                        resave: false,
+                        saveUninitialized: true,
+                }))
 
                 //支持文件系统级日志消息
-                // let logdir = path.join(setting.pathTmpdir, configures.name || 'default')
-                // fs.existsSync(setting.pathTmpdir) || fs.mkdirSync(setting.pathTmpdir)
-                // fs.existsSync(logdir) || fs.mkdirSync(logdir)
-                // if (process.env.NODE_ENV !== 'production') {
-                //         console.log("use combined");
-                //         app.use(morgan('combined'))
-                // } else {
-                //         console.log("use log");
-                //         let options = {
-                //                 stream: fileStreamRotator.getStream({
-                //                         date_format: 'YYYYMMDD',
-                //                         filename: path.join(logdir, configures.name + '-%DATE%.log'),
-                //                         frequency: 'daily',
-                //                         verbose: false
-                //                 })
-                //         }
+                let logdir = path.join(setting.pathTmpdir, configures.name || 'default')
+                fs.existsSync(setting.pathTmpdir) || fs.mkdirSync(setting.pathTmpdir)
+                fs.existsSync(logdir) || fs.mkdirSync(logdir)
+                if (process.env.NODE_ENV !== 'production') {
+                        console.log("use combined");
+                        app.use(morgan('combined'))
+                } else {
+                        console.log("use log");
+                        let options = {
+                                stream: fileStreamRotator.getStream({
+                                        date_format: 'YYYYMMDD',
+                                        filename: path.join(logdir, configures.name + '-%DATE%.log'),
+                                        frequency: 'daily',
+                                        verbose: false
+                                })
+                        }
+                        app.use(morgan('combined', options))
+                }
 
-                //         app.use(morgan('combined', options))
-                // }
+                if (process.env.NODE_ENV !== 'production') {
+                        app.use('/development', (req: express.Request, res: express.Response, next: any) => {
+                                res.header('Content-Type', 'text/html;charset=utf-8')
+                                res.end(dev.render({ pathinfo: req.path }))
+                        })
+                }
 
-                // if (process.env.NODE_ENV !== 'production') {
-                //         app.use('/development', (req: express.Request, res: express.Response, next: any) => {
-                //                 res.header('Content-Type', 'text/html;charset=utf-8')
-                //                 res.end(dev.render({ pathinfo: req.path }))
-                //         })
-                // }
-                app.use('/', (req, res, next) => {
-                        console.log("ok123");
-                        res.end('good111')
+                app.use('/service/upload/imgUpload', multiparty(), (req: express.Request, res: express.Response, next: any) => {
+                        upload(req, res, next).then((callback) => {
+                                console.log(callback)
+                                res.header('charset', 'utf8')
+                                res.header('Content-Type', 'application/json')
+                                res.status(callback.code < 1000 ? callback.code : 200).end(JSON.stringify(callback))
+                        })
+
                 })
-                // app.use('/service/upload/imgUpload', multiparty(), (req: express.Request, res: express.Response, next: any) => {
-                //         upload(req, res, next).then((callback) => {
-                //                 console.log(callback)
-                //                 res.header('charset', 'utf8')
-                //                 res.header('Content-Type', 'application/json')
-                //                 res.status(callback.code < 1000 ? callback.code : 200).end(JSON.stringify(callback))
-                //         })
 
-                // })
+                app.use((req: express.Request, res: express.Response, next: any) => {
+                        let requestData = new request(req)
+                        let responseData = new response(res)
 
-                // app.use((req: express.Request, res: express.Response, next: any) => {
-                //         let requestData = new request(req)
-                //         let responseData = new response(res)
+                        let accessToken = requestData.REQUEST('accessToken') || requestData.COOKIE('accessToken') || ''
+                        let timezone = parseFloat(requestData.REQUEST('timezone', '8.0'))
+                        let appID = requestData.REQUEST('appid')
+                        let parameters = utils.jsonDecode(requestData.REQUEST('parameters'))
+                        let controller = configures.mappings[req.path]
 
-                //         let accessToken = requestData.REQUEST('accessToken') || requestData.COOKIE('accessToken') || ''
-                //         let timezone = parseFloat(requestData.REQUEST('timezone', '8.0'))
-                //         let appID = requestData.REQUEST('appid')
-                //         let parameters = utils.jsonDecode(requestData.REQUEST('parameters'))
-                //         let controller = configures.mappings[req.path]
+                        // console.log("controller::", controller);
 
-                //         // console.log("controller::", controller);
+                        if (!controller || !controller.component) {
+                                return responseData.apiNotFound()
+                        }
 
-                //         if (!controller || !controller.component) {
-                //                 return responseData.apiNotFound()
-                //         }
+                        if (/^\/api\//i.test(req.path) === false) {
+                                return controller.component(requestData, responseData, parameters).then((callback: IResult) => {
+                                        switch (callback.code) {
+                                                case 403:
+                                                        return responseData.errorPermission()
 
-                //         if (/^\/api\//i.test(req.path) === false) {
-                //                 return controller.component(requestData, responseData, parameters).then((callback: IResult) => {
-                //                         switch (callback.code) {
-                //                                 case 403:
-                //                                         return responseData.errorPermission()
+                                                case 404:
+                                                        return responseData.errorNotFound()
 
-                //                                 case 404:
-                //                                         return responseData.errorNotFound()
+                                                default:
+                                                        return responseData.renderHTML(callback.data, callback.code)
+                                        }
+                                }, (err: Error) => {
+                                        if (process.env.NODE_ENV !== 'production') {
+                                                console.log(err)
+                                        }
 
-                //                                 default:
-                //                                         return responseData.renderHTML(callback.data, callback.code)
-                //                         }
-                //                 }, (err: Error) => {
-                //                         if (process.env.NODE_ENV !== 'production') {
-                //                                 console.log(err)
-                //                         }
+                                        responseData.errorInternalServer()
+                                })
+                        }
 
-                //                         responseData.errorInternalServer()
-                //                 })
-                //         }
+                        if (controller.method !== 'GET' && utils.empty(requestData.POST())) {
+                                return responseData.apiPermission()
+                        }
 
-                //         if (controller.method !== 'GET' && utils.empty(requestData.POST())) {
-                //                 return responseData.apiPermission()
-                //         }
+                        // console.log("session::", requestData.SESSION());
 
-                //         // console.log("session::", requestData.SESSION());
+                        let url = requestData.getHeader("Origin");
+                        responseData.setHeader('Access-Control-Allow-Origin', url)
+                        responseData.setHeader('Access-Control-Allow-Methods', 'POST')
+                        responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
+                        responseData.setHeader("Access-Control-ALLOW-Credentials", "true") // 跨域设置cookie
 
-                //         let url = requestData.getHeader("Origin");
-                //         responseData.setHeader('Access-Control-Allow-Origin', url)
-                //         responseData.setHeader('Access-Control-Allow-Methods', 'POST')
-                //         responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
-                //         responseData.setHeader("Access-Control-ALLOW-Credentials", "true") // 跨域设置cookie
+                        // if (!requestData.SESSION().user && controller.auth > 1) {
+                        if (controller.auth > 1) {
+                                console.log(111111);
+                                res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
+                                responseData.renderJSON({code: 403, msg: 'do not have permission'})
+                        }
 
-                //         // if (!requestData.SESSION().user && controller.auth > 1) {
-                //         if (controller.auth > 1) {
-                //                 console.log(111111);
-                //                 res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
-                //                 responseData.renderJSON({code: 403, msg: 'do not have permission'})
-                //         }
-
-                //         log.api(requestData)
-                //         controller.component(requestData, responseData, parameters).then((callback: IResult) => {
-                //                 responseData.renderJSON(callback)
-                //         }, (err: Error) => {
-                //                 if (process.env.NODE_ENV !== 'production') {
-                //                         console.log(err)
-                //                 }
-                //                 console.log(err);
-                //                 responseData.apiInternalServer()
-                //         })
-                // })
+                        log.api(requestData)
+                        controller.component(requestData, responseData, parameters).then((callback: IResult) => {
+                                responseData.renderJSON(callback)
+                        }, (err: Error) => {
+                                if (process.env.NODE_ENV !== 'production') {
+                                        console.log(err)
+                                }
+                                console.log(err);
+                                responseData.apiInternalServer()
+                        })
+                })
 
                 return app
         }
