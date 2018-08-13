@@ -10,9 +10,6 @@
         ],
         "authors": "hjboss <hongjiangproject@gmail.com>",
         "license": "Apache-2.0",
-        "engines": {
-                "node": ">=8.9.0"
-        },
         "main": "./build/jdyx-webservice.js",
         "scripts": {
                 "start": "NODE_ENV=production pm2 start ./build/webservices-master.js",
