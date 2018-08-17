@@ -155,62 +155,64 @@ export default class serve {
                         let parameters = utils.jsonDecode(requestData.REQUEST('parameters'))
                         let controller = configures.mappings[req.path]
 
-                        // console.log("controller::", controller);
+                        res.end('okok')
 
-                        if (!controller || !controller.component) {
-                                return responseData.apiNotFound()
-                        }
+                        // // console.log("controller::", controller);
 
-                        if (/^\/api\//i.test(req.path) === false) {
-                                return controller.component(requestData, responseData, parameters).then((callback: IResult) => {
-                                        switch (callback.code) {
-                                                case 403:
-                                                        return responseData.errorPermission()
-
-                                                case 404:
-                                                        return responseData.errorNotFound()
-
-                                                default:
-                                                        return responseData.renderHTML(callback.data, callback.code)
-                                        }
-                                }, (err: Error) => {
-                                        if (process.env.NODE_ENV !== 'production') {
-                                                console.log(err)
-                                        }
-
-                                        responseData.errorInternalServer()
-                                })
-                        }
-
-                        // if (controller.method !== 'GET' && utils.empty(requestData.POST())) {
-                        //         return responseData.apiPermission()
+                        // if (!controller || !controller.component) {
+                        //         return responseData.apiNotFound()
                         // }
 
-                        // console.log("session::", requestData.SESSION());
+                        // if (/^\/api\//i.test(req.path) === false) {
+                        //         return controller.component(requestData, responseData, parameters).then((callback: IResult) => {
+                        //                 switch (callback.code) {
+                        //                         case 403:
+                        //                                 return responseData.errorPermission()
 
-                        let url = requestData.getHeader("Origin");
-                        responseData.setHeader('Access-Control-Allow-Origin', url)
-                        responseData.setHeader('Access-Control-Allow-Methods', 'POST')
-                        responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
-                        responseData.setHeader("Access-Control-ALLOW-Credentials", "true") // 跨域设置cookie
+                        //                         case 404:
+                        //                                 return responseData.errorNotFound()
 
-                        if (!requestData.SESSION().user && controller.auth > 1) {
-                        // if (controller.auth > 1) {
-                                console.log(111111);
-                                res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
-                                responseData.renderJSON({ code: 403, msg: 'do not have permission' })
-                        }
+                        //                         default:
+                        //                                 return responseData.renderHTML(callback.data, callback.code)
+                        //                 }
+                        //         }, (err: Error) => {
+                        //                 if (process.env.NODE_ENV !== 'production') {
+                        //                         console.log(err)
+                        //                 }
 
-                        log.api(requestData)
-                        controller.component(requestData, responseData, parameters).then((callback: IResult) => {
-                                responseData.renderJSON(callback)
-                        }, (err: Error) => {
-                                if (process.env.NODE_ENV !== 'production') {
-                                        console.log(err)
-                                }
-                                console.log(err);
-                                responseData.apiInternalServer()
-                        })
+                        //                 responseData.errorInternalServer()
+                        //         })
+                        // }
+
+                        // // if (controller.method !== 'GET' && utils.empty(requestData.POST())) {
+                        // //         return responseData.apiPermission()
+                        // // }
+
+                        // // console.log("session::", requestData.SESSION());
+
+                        // let url = requestData.getHeader("Origin");
+                        // responseData.setHeader('Access-Control-Allow-Origin', url)
+                        // responseData.setHeader('Access-Control-Allow-Methods', 'POST')
+                        // responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
+                        // responseData.setHeader("Access-Control-ALLOW-Credentials", "true") // 跨域设置cookie
+
+                        // if (!requestData.SESSION().user && controller.auth > 1) {
+                        // // if (controller.auth > 1) {
+                        //         console.log(111111);
+                        //         res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
+                        //         responseData.renderJSON({ code: 403, msg: 'do not have permission' })
+                        // }
+
+                        // log.api(requestData)
+                        // controller.component(requestData, responseData, parameters).then((callback: IResult) => {
+                        //         responseData.renderJSON(callback)
+                        // }, (err: Error) => {
+                        //         if (process.env.NODE_ENV !== 'production') {
+                        //                 console.log(err)
+                        //         }
+                        //         console.log(err);
+                        //         responseData.apiInternalServer()
+                        // })
                 })
 
                 return app
