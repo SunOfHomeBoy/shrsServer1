@@ -10,6 +10,10 @@ import * as compression from 'compression'
 import * as cookieParser from 'cookie-parser'
 import * as express from 'express'
 import * as session from 'express-session'
+import * as connectMongo from 'connect-mongo'
+import * as mongoose from 'mongoose'
+import connect from '../config/mongodb'
+
 import * as fileStreamRotator from 'file-stream-rotator'
 import * as fs from 'fs'
 import * as http from 'http'
@@ -41,8 +45,8 @@ export default class serve {
         }
 
         // 创建单实例的HTTP应用服务器
-        public httpd() {
-                http.createServer(this.api()).listen(setting.port, () => {
+        public httpd(port: number = 0) {
+                http.createServer(this.api()).listen(port/*  || setting.port */, () => {
                         console.log(this.configures.name + ' running on port ' + setting.port)
                 })
         }
@@ -70,6 +74,8 @@ export default class serve {
         }
 
         private api(): express.Express {
+                let MongoStore = connectMongo(session)
+                console.log(MongoStore);
                 let app = express()
                 let configures = this.configures
 
@@ -83,8 +89,15 @@ export default class serve {
                 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
                 app.use(cookieParser())
 
+                // mongoose.connect(`mongodb://${connect.host}:${connect.port}/sh111`, {
+
+                mongoose.connect(`mongodb://${connect.host}:${connect.port}/${connect.data}`, {
+                        useMongoClient: true
+                });
+
                 app.use(session({
                         secret: 'shrs',
+                        store: new MongoStore({ mongooseConnection: mongoose.connection }),
                         name: 'shrsID',   //这里的name值得是cookie的name，默认cookie的name是：connect.sid
                         cookie: {
                                 // domain: '192.168.0.191:8081',
@@ -181,11 +194,11 @@ export default class serve {
                         responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
                         responseData.setHeader("Access-Control-ALLOW-Credentials", "true") // 跨域设置cookie
 
-                        // if (!requestData.SESSION().user && controller.auth > 1) {
-                        if (controller.auth > 1) {
+                        if (!requestData.SESSION().user && controller.auth > 1) {
+                        // if (controller.auth > 1) {
                                 console.log(111111);
                                 res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
-                                responseData.renderJSON({code: 403, msg: 'do not have permission'})
+                                responseData.renderJSON({ code: 403, msg: 'do not have permission' })
                         }
 
                         log.api(requestData)

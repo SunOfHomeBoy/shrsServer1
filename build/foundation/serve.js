@@ -5,6 +5,9 @@ var compression = require("compression");
 var cookieParser = require("cookie-parser");
 var express = require("express");
 var session = require("express-session");
+var connectMongo = require("connect-mongo");
+var mongoose = require("mongoose");
+var mongodb_1 = require("../config/mongodb");
 var fileStreamRotator = require("file-stream-rotator");
 var fs = require("fs");
 var http = require("http");
@@ -29,9 +32,10 @@ var serve = (function () {
             this.configures.mappings[route.path] = route;
         }
     }
-    serve.prototype.httpd = function () {
+    serve.prototype.httpd = function (port) {
         var _this = this;
-        http.createServer(this.api()).listen(setting_1["default"].port, function () {
+        if (port === void 0) { port = 0; }
+        http.createServer(this.api()).listen(port, function () {
             console.log(_this.configures.name + ' running on port ' + setting_1["default"].port);
         });
     };
@@ -54,6 +58,8 @@ var serve = (function () {
         });
     };
     serve.prototype.api = function () {
+        var MongoStore = connectMongo(session);
+        console.log(MongoStore);
         var app = express();
         var configures = this.configures;
         app.set('env', process.env.NODE_ENV || 'development');
@@ -64,8 +70,12 @@ var serve = (function () {
         app.use(bodyParser.json({ limit: '50mb' }));
         app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
         app.use(cookieParser());
+        mongoose.connect("mongodb://" + mongodb_1["default"].host + ":" + mongodb_1["default"].port + "/" + mongodb_1["default"].data, {
+            useMongoClient: true
+        });
         app.use(session({
             secret: 'shrs',
+            store: new MongoStore({ mongooseConnection: mongoose.connection }),
             name: 'shrsID',
             cookie: {
                 httpOnly: true
