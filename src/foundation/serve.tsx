@@ -46,7 +46,7 @@ export default class serve {
 
         // 创建单实例的HTTP应用服务器
         public httpd(port: number = 0) {
-                http.createServer(this.api()).listen(port/*  || setting.port */, () => {
+                http.createServer(this.api()).listen(port, () => {
                         console.log(this.configures.name + ' running on port ' + setting.port)
                 })
         }
@@ -182,9 +182,9 @@ export default class serve {
                                 })
                         }
 
-                        if (controller.method !== 'GET' && utils.empty(requestData.POST())) {
-                                return responseData.apiPermission()
-                        }
+                        // if (controller.method !== 'GET' && utils.empty(requestData.POST())) {
+                        //         return responseData.apiPermission()
+                        // }
 
                         // console.log("session::", requestData.SESSION());
 
