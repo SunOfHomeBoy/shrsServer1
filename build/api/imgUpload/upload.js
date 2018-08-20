@@ -120,6 +120,7 @@ function upload(req, res, next) {
                 case 7: return [4, fileCDN(fh)];
                 case 8:
                     cdn = _b.sent();
+                    console.log("cdn", cdn);
                     if (!foundation_1.utils.empty(cdn) && cdn.data) {
                         fs.unlink(fh.path, function (err) { console.log(err, '删除'); });
                     }

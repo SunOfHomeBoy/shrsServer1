@@ -51,6 +51,7 @@ export default async function upload(req: express.Request, res: express.Response
                                 return render({ code: 200, msg: 'array', data: cdns })
                         } else {
                                 let cdn = await fileCDN(fh)
+                                console.log("cdn", cdn);
                                 if (!utils.empty(cdn) && cdn.data) {
                                         fs.unlink(fh.path, err => { console.log(err, '删除') })
                                 }
