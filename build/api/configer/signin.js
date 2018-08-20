@@ -47,6 +47,7 @@ function signin(req, res, parameters) {
                     return [4, foundation_1.schema.member.findOne({ where: { username: parameters.user, password: password } })];
                 case 1:
                     memberInfo = _a.sent();
+                    console.log("memberInfo", memberInfo);
                     if (!foundation_1.utils.empty(memberInfo)) {
                         console.log("memberInfo::", memberInfo);
                         user = {

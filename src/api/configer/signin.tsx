@@ -36,7 +36,7 @@ export default async function signin(req: request, res: response, parameters: an
         let memberInfo = await schema.member.findOne(
                 { where: { username: parameters.user, password } }
         )
-
+        console.log("memberInfo", memberInfo);
         // second 判断 登录后，给予 接口调用权限，并设置 Cookies
         if (!utils.empty(memberInfo)) {
                 console.log("memberInfo::", memberInfo);
