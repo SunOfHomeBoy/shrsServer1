@@ -141,7 +141,7 @@ export default class serve {
                         })
                 }
 
-                app.use('/cgi-bin/service/upload/imgUpload', multiparty(), (req: express.Request, res: express.Response, next: any) => {
+                app.use('/service/upload/imgUpload', multiparty(), (req: express.Request, res: express.Response, next: any) => {
                         console.log("upload");
                         upload(req, res, next).then((callback) => {
                                 console.log(callback)
@@ -200,8 +200,6 @@ export default class serve {
                         responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
                         responseData.setHeader("Access-Control-ALLOW-Credentials", "true") // 跨域设置cookie
 
-                        console.log("dyapp2");
-
                         if (!requestData.SESSION().user && controller.auth > 1) {
                         // if (controller.auth > 1) {
                                 console.log(111111);
@@ -210,7 +208,6 @@ export default class serve {
                         }
 
                         log.api(requestData)
-                        console.log("log Api");
                         console.log(controller);
                         console.log(process.env.NODE_ENV);
 

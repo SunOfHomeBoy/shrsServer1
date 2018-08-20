@@ -14,12 +14,13 @@ export default {
         pathAssets: path.join(__dirname, '../../assets'),
         pathConfig: process.env.NODE_ENV !== 'production'
                 ? path.join(__dirname, '../../etc')
+                        // : path.join(__dirname, '../../etc'),
                 : '/mnt/www/etc',
         pathPublic: process.env.NODE_ENV !== 'production'
                 ? path.join(__dirname, '../../public')
+                        // : path.join(__dirname, '../../public'),
                 : '/mnt/www/PUBLIC',
         pathTmpdir: process.env.NODE_ENV !== 'production'
-                ? path.join(__dirname, '../../tmp')
-                // : '/mnt/www/tmp'
+                ? path.join(__dirname, '../../tmp')   
                 : '/mnt/d/tmp'
 }

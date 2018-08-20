@@ -59,9 +59,11 @@ function searchImg(req, res, parameters) {
                             $gt: foundation_1.utils.beforeToday(parameters.imgPublish)
                         };
                     }
+                    console.log("filter:::", filter);
                     return [4, foundation_1.schema.imgs.findPage(filter)];
                 case 1:
                     document = _a.sent();
+                    console.log("document", document);
                     document.items = foundation_1.utils.forEach(document.items, function (e) {
                         return {
                             imgID: e.imgID,

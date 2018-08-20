@@ -57,9 +57,9 @@ export default async function searchImg(req: request, res: response, parameters:
                         $gt: utils.beforeToday(parameters.imgPublish)
                 }
         }
-        // console.log("filter:::", filter);
+        console.log("filter:::", filter);
         let document = await schema.imgs.findPage(filter)
-        // console.log(document);
+        console.log("document", document);
         document.items = utils.forEach(document.items, (e: any): any => {
                 // console.log("document.items:::", e);
                 return {

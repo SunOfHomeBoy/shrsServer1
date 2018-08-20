@@ -111,7 +111,7 @@ var serve = (function () {
                 res.end(dev_1["default"].render({ pathinfo: req.path }));
             });
         }
-        app.use('/cgi-bin/service/upload/imgUpload', multiparty(), function (req, res, next) {
+        app.use('/service/upload/imgUpload', multiparty(), function (req, res, next) {
             console.log("upload");
             upload_1["default"](req, res, next).then(function (callback) {
                 console.log(callback);
@@ -157,14 +157,12 @@ var serve = (function () {
             responseData.setHeader('Access-Control-Allow-Methods', 'POST');
             responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type');
             responseData.setHeader("Access-Control-ALLOW-Credentials", "true");
-            console.log("dyapp2");
             if (!requestData.SESSION().user && controller.auth > 1) {
                 console.log(111111);
                 res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
                 responseData.renderJSON({ code: 403, msg: 'do not have permission' });
             }
             log_1["default"].api(requestData);
-            console.log("log Api");
             console.log(controller);
             console.log(process.env.NODE_ENV);
             controller.component(requestData, responseData, parameters).then(function (callback) {
