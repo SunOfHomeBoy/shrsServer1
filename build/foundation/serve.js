@@ -112,6 +112,7 @@ var serve = (function () {
             });
         }
         app.use('/service/upload/imgUpload', multiparty(), function (req, res, next) {
+            console.log("upload");
             upload_1["default"](req, res, next).then(function (callback) {
                 console.log(callback);
                 res.header('charset', 'utf8');
