@@ -141,7 +141,7 @@ export default class serve {
                         })
                 }
 
-                app.use('/service/upload/imgUpload', multiparty(), (req: express.Request, res: express.Response, next: any) => {
+                app.use('/cgi-bin/service/upload/imgUpload', multiparty(), (req: express.Request, res: express.Response, next: any) => {
                         console.log("upload");
                         upload(req, res, next).then((callback) => {
                                 console.log(callback)

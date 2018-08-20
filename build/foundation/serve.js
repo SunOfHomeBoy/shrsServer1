@@ -111,7 +111,7 @@ var serve = (function () {
                 res.end(dev_1["default"].render({ pathinfo: req.path }));
             });
         }
-        app.use('/service/upload/imgUpload', multiparty(), function (req, res, next) {
+        app.use('/cgi-bin/service/upload/imgUpload', multiparty(), function (req, res, next) {
             console.log("upload");
             upload_1["default"](req, res, next).then(function (callback) {
                 console.log(callback);
