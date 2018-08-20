@@ -42,6 +42,7 @@ function searchArticle(req, res, parameters) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    console.log("wenzhang1111");
                     filter = {
                         where: {
                             articleLang: parameters.articleLang || 'cn',
@@ -64,21 +65,12 @@ function searchArticle(req, res, parameters) {
                             $gt: foundation_1.utils.beforeToday(parameters.articlePublish)
                         };
                     }
+                    console.log("befor");
                     return [4, foundation_1.schema.article.findPage(filter)];
                 case 1:
                     document = _a.sent();
-                    document.items = foundation_1.utils.forEach(document.items, function (e) {
-                        return {
-                            articleID: e.articleID,
-                            articleMode: e.articleMode,
-                            articleType: e.articleType,
-                            title: e.title,
-                            thumb: e.thumb,
-                            publish: foundation_1.utils.formatDate('YYYY-MM-DD', e.publish),
-                            description: e.description
-                        };
-                    });
-                    return [2, foundation_1.render({ code: 200, msg: '', data: document })];
+                    console.log("after");
+                    return [2, foundation_1.render({ code: 200, msg: '55555566666666', data: process.env.NODE_ENV })];
             }
         });
     });

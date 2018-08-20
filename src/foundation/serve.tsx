@@ -22,10 +22,10 @@ import * as multiparty from 'connect-multiparty'
 import * as path from 'path'
 import * as pm from 'pm'
 import log from './log'
-import payment from './payment'
+// import payment from './payment'
 import request from './request'
 import response, { IResult, render } from './response'
-import token from './token'
+// import token from './token'
 import * as pureview from './purview'
 
 import utils from './utils'
@@ -91,13 +91,19 @@ export default class serve {
 
                 // mongoose.connect(`mongodb://${connect.host}:${connect.port}/sh111`, {
 
-                mongoose.connect(`mongodb://${connect.host}:${connect.port}/${connect.data}`, {
-                        useMongoClient: true
-                });
+                mongoose.connect(
+                        `mongodb://${connect.host}:${connect.port}/${connect.data}`,
+                        {
+                                useMongoClient: true
+                        }
+                );
+                console.log(mongoose.connection);
 
                 app.use(session({
                         secret: 'shrs',
-                        store: new MongoStore({ mongooseConnection: mongoose.connection }),
+                        store: new MongoStore({
+                                mongooseConnection: mongoose.connection
+                        }),
                         name: 'shrsID',   //这里的name值得是cookie的name，默认cookie的name是：connect.sid
                         cookie: {
                                 // domain: '192.168.0.191:8081',
@@ -146,6 +152,7 @@ export default class serve {
                 })
 
                 app.use((req: express.Request, res: express.Response, next: any) => {
+                        console.log("dy app");
                         let requestData = new request(req)
                         let responseData = new response(res)
 
@@ -155,64 +162,69 @@ export default class serve {
                         let parameters = utils.jsonDecode(requestData.REQUEST('parameters'))
                         let controller = configures.mappings[req.path]
 
-                        res.end('okok')
+                        if (!controller || !controller.component) {
+                                return responseData.apiNotFound()
+                        }
 
-                        // // console.log("controller::", controller);
+                        if (/^\/api\//i.test(req.path) === false) {
+                                return controller.component(requestData, responseData, parameters).then((callback: IResult) => {
+                                        switch (callback.code) {
+                                                case 403:
+                                                        return responseData.errorPermission()
 
-                        // if (!controller || !controller.component) {
-                        //         return responseData.apiNotFound()
-                        // }
+                                                case 404:
+                                                        return responseData.errorNotFound()
 
-                        // if (/^\/api\//i.test(req.path) === false) {
-                        //         return controller.component(requestData, responseData, parameters).then((callback: IResult) => {
-                        //                 switch (callback.code) {
-                        //                         case 403:
-                        //                                 return responseData.errorPermission()
+                                                default:
+                                                        return responseData.renderHTML(callback.data, callback.code)
+                                        }
+                                }, (err: Error) => {
+                                        if (process.env.NODE_ENV !== 'production') {
+                                                console.log(err)
+                                        }
 
-                        //                         case 404:
-                        //                                 return responseData.errorNotFound()
+                                        responseData.errorInternalServer()
+                                })
+                        }
 
-                        //                         default:
-                        //                                 return responseData.renderHTML(callback.data, callback.code)
-                        //                 }
-                        //         }, (err: Error) => {
-                        //                 if (process.env.NODE_ENV !== 'production') {
-                        //                         console.log(err)
-                        //                 }
+                        if (controller.method !== 'GET' && utils.empty(requestData.POST())) {
+                                return responseData.apiPermission()
+                        }
 
-                        //                 responseData.errorInternalServer()
-                        //         })
-                        // }
+                        // console.log("session::", requestData.SESSION());
 
-                        // // if (controller.method !== 'GET' && utils.empty(requestData.POST())) {
-                        // //         return responseData.apiPermission()
-                        // // }
+                        let url = requestData.getHeader("Origin");
+                        responseData.setHeader('Access-Control-Allow-Origin', url)
+                        responseData.setHeader('Access-Control-Allow-Methods', 'POST')
+                        responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
+                        responseData.setHeader("Access-Control-ALLOW-Credentials", "true") // 跨域设置cookie
 
-                        // // console.log("session::", requestData.SESSION());
+                        console.log("dyapp2");
 
-                        // let url = requestData.getHeader("Origin");
-                        // responseData.setHeader('Access-Control-Allow-Origin', url)
-                        // responseData.setHeader('Access-Control-Allow-Methods', 'POST')
-                        // responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type')
-                        // responseData.setHeader("Access-Control-ALLOW-Credentials", "true") // 跨域设置cookie
+                        if (!requestData.SESSION().user && controller.auth > 1) {
+                        // if (controller.auth > 1) {
+                                console.log(111111);
+                                res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
+                                responseData.renderJSON({ code: 403, msg: 'do not have permission' })
+                        }
 
-                        // if (!requestData.SESSION().user && controller.auth > 1) {
-                        // // if (controller.auth > 1) {
-                        //         console.log(111111);
-                        //         res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
-                        //         responseData.renderJSON({ code: 403, msg: 'do not have permission' })
-                        // }
+                        log.api(requestData)
+                        console.log("log Api");
+                        console.log(controller);
+                        console.log(process.env.NODE_ENV);
 
-                        // log.api(requestData)
-                        // controller.component(requestData, responseData, parameters).then((callback: IResult) => {
-                        //         responseData.renderJSON(callback)
-                        // }, (err: Error) => {
-                        //         if (process.env.NODE_ENV !== 'production') {
-                        //                 console.log(err)
-                        //         }
-                        //         console.log(err);
-                        //         responseData.apiInternalServer()
-                        // })
+                        controller.component(requestData, responseData, parameters).then((callback: IResult) => {
+                                console.log("callbacjk?");
+                                responseData.renderJSON(callback)
+                        }, (err: Error) => {
+                                if (process.env.NODE_ENV !== 'production') {
+                                        console.log(err)
+                                }
+                                console.log(err);
+                                responseData.apiInternalServer()
+                        })
+
+                        console.log("jump?");
                 })
 
                 return app

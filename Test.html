@@ -26,6 +26,9 @@
       <button onclick="searchArticle()">获取文章列表</button>
     </div>
     <div>
+      <button onclick="signin()">signin</button>
+    </div>
+    <div>
       <button onclick="detArticle()">获取文章详情</button>
     </div>
     <div>
@@ -183,6 +186,30 @@
           }
         })
       }
+      function signin() {
+          ajax({
+            url: "http://localhost:10007/api/signin", //请求地址
+            type: "POST", //请求方式
+            data: {
+              parameters: JSON.stringify({
+                  "user": "四海日盛", 
+                  "password": "shrs88888"
+              })
+            }, //请求参数
+            dataType: "json",
+            success: function (response, xml) {
+              // 此处放成功后执行的代码
+              var allData = JSON.parse(response)
+              // result.innerHTML = allData.data.allMobile
+              console.log(allData);
+            },
+            fail: function (status) {
+              // 此处放失败后执行的代码
+              console.log('错误', status);
+            }
+          })
+        }
+
 
       function searchArticle() {
         console.log("diaoyong!!!");

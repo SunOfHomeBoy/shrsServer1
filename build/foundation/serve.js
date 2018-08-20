@@ -15,6 +15,7 @@ var morgan = require("morgan");
 var multiparty = require("connect-multiparty");
 var path = require("path");
 var pm = require("pm");
+var log_1 = require("./log");
 var request_1 = require("./request");
 var response_1 = require("./response");
 var utils_1 = require("./utils");
@@ -72,9 +73,12 @@ var serve = (function () {
         mongoose.connect("mongodb://" + mongodb_1["default"].host + ":" + mongodb_1["default"].port + "/" + mongodb_1["default"].data, {
             useMongoClient: true
         });
+        console.log(mongoose.connection);
         app.use(session({
             secret: 'shrs',
-            store: new MongoStore({ mongooseConnection: mongoose.connection }),
+            store: new MongoStore({
+                mongooseConnection: mongoose.connection
+            }),
             name: 'shrsID',
             cookie: {
                 httpOnly: true
@@ -116,6 +120,7 @@ var serve = (function () {
             });
         });
         app.use(function (req, res, next) {
+            console.log("dy app");
             var requestData = new request_1["default"](req);
             var responseData = new response_1["default"](res);
             var accessToken = requestData.REQUEST('accessToken') || requestData.COOKIE('accessToken') || '';
@@ -123,7 +128,55 @@ var serve = (function () {
             var appID = requestData.REQUEST('appid');
             var parameters = utils_1["default"].jsonDecode(requestData.REQUEST('parameters'));
             var controller = configures.mappings[req.path];
-            res.end('okok');
+            if (!controller || !controller.component) {
+                return responseData.apiNotFound();
+            }
+            if (/^\/api\//i.test(req.path) === false) {
+                return controller.component(requestData, responseData, parameters).then(function (callback) {
+                    switch (callback.code) {
+                        case 403:
+                            return responseData.errorPermission();
+                        case 404:
+                            return responseData.errorNotFound();
+                        default:
+                            return responseData.renderHTML(callback.data, callback.code);
+                    }
+                }, function (err) {
+                    if (process.env.NODE_ENV !== 'production') {
+                        console.log(err);
+                    }
+                    responseData.errorInternalServer();
+                });
+            }
+            if (controller.method !== 'GET' && utils_1["default"].empty(requestData.POST())) {
+                return responseData.apiPermission();
+            }
+            var url = requestData.getHeader("Origin");
+            responseData.setHeader('Access-Control-Allow-Origin', url);
+            responseData.setHeader('Access-Control-Allow-Methods', 'POST');
+            responseData.setHeader('Access-Control-Allow-Headers', 'x-requested-with,content-type');
+            responseData.setHeader("Access-Control-ALLOW-Credentials", "true");
+            console.log("dyapp2");
+            if (!requestData.SESSION().user && controller.auth > 1) {
+                console.log(111111);
+                res.setHeader('Set-Cookie', ['user=true;path=/;max-age=0;', 'access=0;path=/;max-age=0;']);
+                responseData.renderJSON({ code: 403, msg: 'do not have permission' });
+            }
+            log_1["default"].api(requestData);
+            console.log("log Api");
+            console.log(controller);
+            console.log(process.env.NODE_ENV);
+            controller.component(requestData, responseData, parameters).then(function (callback) {
+                console.log("callbacjk?");
+                responseData.renderJSON(callback);
+            }, function (err) {
+                if (process.env.NODE_ENV !== 'production') {
+                    console.log(err);
+                }
+                console.log(err);
+                responseData.apiInternalServer();
+            });
+            console.log("jump?");
         });
         return app;
     };

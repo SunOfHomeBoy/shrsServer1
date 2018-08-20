@@ -15,7 +15,6 @@ var record_1 = require("./schema/record");
 var recruitment_1 = require("./schema/recruitment");
 var relation_1 = require("./schema/relation");
 var resume_1 = require("./schema/resume");
-var team_1 = require("./schema/team");
 var imgs_1 = require("./schema/imgs");
 var imgList_1 = require("./schema/imgList");
 exports["default"] = {
@@ -34,7 +33,6 @@ exports["default"] = {
     recruitment: recruitment_1["default"],
     relation: relation_1["default"],
     resume: resume_1["default"],
-    team: team_1["default"],
     imgs: imgs_1["default"],
     imgList: imgList_1["default"]
 };
